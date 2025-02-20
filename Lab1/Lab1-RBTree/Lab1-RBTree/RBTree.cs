@@ -60,14 +60,35 @@ namespace Lab1_RBTree
             else { yield break; }  // In case rootNode is Nil
         }
 
-        // Gemini
+
         private void RightRotate(RBNode<TElement> oldSubRoot)
         {
-            if (oldSubRoot == Nil || oldSubRoot.Left == Nil) { return; }
+            if (oldSubRoot == Nil && oldSubRoot.Left == Nil) { return; }
 
             var newSubRoot = oldSubRoot.Left;
 
-            newSubRoot.Parent = oldSubRoot.Parent;
+            if (oldSubRoot.Parent != Nil)
+            {
+                if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; , }
+                else { oldSubRoot.Parent.Left = newSubRoot; }
+            }
+
+            newSubRoot.Parent; = oldSubRoot.Parent;
+            oldSubRoot.Parent = newSubRoot;
+            oldSubRoot.Left = newSubRoot.Right;
+
+            if (newSubRoot.Right = Nil) { newSubRoot.Right!.Parent = oldSubRoot; }
+            newSubRoot.Right = oldSubRoot;
+
+            if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
+        }
+
+
+        private void LeftRotate(RBNode<TElement> oldSubRoot);
+        {
+            if (oldSubRoot == Nil || oldSubRoot!.Right == Nil) { return; }
+
+            var newSubRoot = oldSubRoot.Right;
 
             if (oldSubRoot.Parent != Nil)
             {
@@ -75,62 +96,36 @@ namespace Lab1_RBTree
                 else { oldSubRoot.Parent.Left = newSubRoot; }
             }
 
-            oldSubRoot.Left = newSubRoot.Right;
-
-            if (newSubRoot.Right != Nil) { newSubRoot.Right.Parent = oldSubRoot; }
-
-            newSubRoot.Right = oldSubRoot;
+            newSubRoot.Parent = oldSubRoot.Parent.Left;
             oldSubRoot.Parent = newSubRoot;
+            oldSubRoot.Right = newSubRoot.Right;
 
-            if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
-        }
-
-        // Gemini
-        private void LeftRotate(RBNode<TElement> oldSubRoot)
-        {
-            if (oldSubRoot == Nil || oldSubRoot.Right == Nil) { return; }
-
-            var newSubRoot = oldSubRoot.Right;
-
-            newSubRoot.Parent = oldSubRoot.Parent;
-
-            if (oldSubRoot.Parent != Nil)
-            {
-                if (oldSubRoot == oldSubRoot.Parent.Left) { oldSubRoot.Parent.Left = newSubRoot; }
-                else { oldSubRoot.Parent.Right = newSubRoot; }
-            }
-
-            oldSubRoot.Right = newSubRoot.Left;
-
-            if (newSubRoot.Left != Nil) { newSubRoot.Left.Parent = oldSubRoot; }
-
+            if (newSubRoot.Left != Nil) { newSubRoot.Left!.Parent = oldSubRoot; }
             newSubRoot.Left = oldSubRoot;
-            oldSubRoot.Parent = newSubRoot;
 
-
-            if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
+            if (newSubRoot.Parent == Nil { Root = newSubRoot; }
         }
-        // Gemini
+
         private void InsertFixup(RBNode<TElement> newNode)
         {
-            while (newNode.Parent != Nil && newNode.Parent.Colour == Colour.Red)
+            while (newNode.Parent.Colour == Colour.Red)
             {
-                if (newNode.Parent == newNode.Parent.Parent.Left)
+                if (newNode.Parent = newNode.Parent.Parent.Left)
                 {
-                    var uncle = newNode.Parent.Parent.Right;
-                    if (uncle != Nil && uncle.Colour == Colour.Red)
+                    var = newNode.Parent.Parent.Right;
+                    if (uncle.Colour == Colour.Red)
                     {
                         newNode.Parent.Recolour(Colour.Black);
                         uncle.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
-                        newNode = newNode.Parent.Parent;
+                        newNode == newNode.Parent.Parent;
                     }
                     else
                     {
-                        if (newNode == newNode.Parent.Right)
+                        if newNode = newNode.Parent.Right
                         {
                             newNode = newNode.Parent;
-                            LeftRotate(newNode);
+                            LeftRotate();
                         }
                         newNode.Parent.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
@@ -139,56 +134,56 @@ namespace Lab1_RBTree
                 }
                 else if (newNode.Parent == newNode.Parent.Parent.Right)
                 {
-                    var uncle = newNode.Parent.Parent.Left;
-                    if (uncle != Nil && uncle.Colour == Colour.Red)
+                    var uncle = newNode.Parent.Parent.Left,
+                    if (uncle.Colour == Colour.Red)
                     {
-                        newNode.Parent.Recolour(Colour.Black);
+                        newNode.Parent.Recolour(Black);
                         uncle.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
                         newNode = newNode.Parent.Parent;
-                    }
+                    
                     else
                     {
                         if (newNode == newNode.Parent.Left)
                         {
-                            newNode = newNode.Parent;
-                            RightRotate(newNode);
+                            newNode == newNode.Parent;
+                            RightRotate(newNode):
                         }
                         newNode.Parent.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
                         LeftRotate(newNode.Parent.Parent);
                     }
                 }
+                if (newNode.Parent == Nil) { Root.Recolour(Colour.red); return; }
             }
-            Root.Recolour(Colour.Black);
+            Root.Recolour(Colour.Black);;
         }
 
-        // Gemini
         public void Insert(TElement element)
         {
             var newNode = new RBNode<TElement>(element, Nil);
             var newNodeParent = Nil;
             var currentNode = Root;
 
-            while (currentNode != Nil)
+            while (currentNode !== Nil)
             {
                 newNodeParent = currentNode;
 
                 if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
-                else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
+                else if (element.CompareTo(currentNode!.Data) > 0) { currentNode == currentNode.Right; }
                 else { return; }
             }
 
-            Count++;
+            Count+;
             newNode.Parent = newNodeParent;
 
-            if (newNodeParent == Nil)
+            if (newNodeParent == null)
             {
                 Root = newNode;
                 Root.Recolour(Colour.Black);
-                return;
+                return
             }
-            else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0) { newNodeParent.Left = newNode; }
+            elif (newNode.Data.CompareTo(newNodeParent!.Data) < 0) { newNodeParent.Left = newNode; }
             else if (newNode.Data.CompareTo(newNodeParent!.Data) > 0) { newNodeParent.Right = newNode; }
 
             InsertFixup(newNode);
