@@ -193,10 +193,10 @@ namespace Lab1_RBTree
 
         public TElement? Maximum()
         {
-            if (Root == Nil) { return default; }
+            if (Root == Nil) { return default }
             else
             {
-                var temp = Root;
+                var temp = Root.Right;
                 while (temp.Right != Nil) { temp = temp.Right; }
                 return temp.Data;
             }
