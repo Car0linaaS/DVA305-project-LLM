@@ -190,16 +190,15 @@ namespace Lab1_RBTree
             InsertFixup(newNode);
         }
 
-        // Gemini
         public TElement? Maximum()
         {
             if (Root == Nil) { return default; }
             else
             {
                 var temp = Root;
-                while (temp.Right != Nil) { temp = temp.Right; }
+                while (temp.Right != Nil) { temp = temp.Left; }
                 return temp.Data;
-            }
+            
         }
 
 
