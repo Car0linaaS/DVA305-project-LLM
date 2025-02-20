@@ -229,6 +229,7 @@ namespace Lab1_RBTree
             }
         }
 
+        // Gemini
         public TElement? Minimum()
         {
             if (Root == Nil) { return default; }
