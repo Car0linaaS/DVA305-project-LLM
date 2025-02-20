@@ -231,18 +231,19 @@ namespace Lab1_RBTree
             return predecessor;
         }
 
+        // GPT
         public bool Search(TElement element)
         {
             var currentNode = Root;
 
             while (currentNode != Nil)
             {
-                if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Left; }
+                if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
                 else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
                 else { return true; }
             }
 
-            return false:
+            return false;
         }
 
         // Successor() returns the smallest element that is strictly larger than element or null if there is no such element.
