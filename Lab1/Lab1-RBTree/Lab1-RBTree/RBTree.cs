@@ -62,14 +62,14 @@ namespace Lab1_RBTree
             else { yield break; }  // In case rootNode is Nil
         }
 
-        // GPT
+        // Gemini
         private void RightRotate(RBNode<TElement> oldSubRoot)
         {
-            if (oldSubRoot == Nil || oldSubRoot.Left == Nil) { return; } // Fixed missing semicolon
+            if (oldSubRoot == Nil || oldSubRoot.Left == Nil) { return; }
 
             var newSubRoot = oldSubRoot.Left;
 
-            if (oldSubRoot.Parent != Nil) // Fixed extra semicolon
+            if (oldSubRoot.Parent != Nil)
             {
                 if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
                 else { oldSubRoot.Parent.Left = newSubRoot; }
@@ -79,7 +79,7 @@ namespace Lab1_RBTree
             oldSubRoot.Parent = newSubRoot;
             oldSubRoot.Left = newSubRoot.Right;
 
-            if (newSubRoot.Right != Nil) { newSubRoot.Right!.Parent = oldSubRoot; } // Fixed incorrect property access
+            if (newSubRoot.Right != Nil) { newSubRoot.Right!.Parent = oldSubRoot; }
             newSubRoot.Right = oldSubRoot;
 
             if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
@@ -88,38 +88,39 @@ namespace Lab1_RBTree
 
 
 
-        // GPT
+        // Gemini
         private void LeftRotate(RBNode<TElement> oldSubRoot)
         {
-            if (oldSubRoot == Nil || oldSubRoot!.Right == Nil) { return; }
+            if (oldSubRoot == Nil || oldSubRoot.Right == Nil) { return; }
 
             var newSubRoot = oldSubRoot.Right;
 
-            if (oldSubRoot.Parent != Nil) // Fixed missing parentheses
+            if (oldSubRoot.Parent != Nil)
             {
                 if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
                 else { oldSubRoot.Parent.Left = newSubRoot; }
             }
 
-            newSubRoot.Parent = oldSubRoot.Parent; // Fixed incorrect comparison operator
+            newSubRoot.Parent = oldSubRoot.Parent;
             oldSubRoot.Parent = newSubRoot;
             oldSubRoot.Right = newSubRoot.Left;
 
-            if (newSubRoot.Left != Nil) { newSubRoot.Left!.Parent = oldSubRoot; } // Fixed property access
+            if (newSubRoot.Left != Nil) { newSubRoot.Left!.Parent = oldSubRoot; }
             newSubRoot.Left = oldSubRoot;
 
             if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
         }
 
-        // GPT
+
+        // Gemini
         private void InsertFixup(RBNode<TElement> newNode)
         {
-            while (newNode.Parent.Colour == Colour.Red)
+            while (newNode.Parent != Nil && newNode.Parent.Colour == Colour.Red)
             {
                 if (newNode.Parent == newNode.Parent.Parent.Left)
                 {
                     var uncle = newNode.Parent.Parent.Right;
-                    if (uncle.Colour == Colour.Red) // Fixed incorrect condition
+                    if (uncle != Nil && uncle.Colour == Colour.Red)
                     {
                         newNode.Parent.Recolour(Colour.Black);
                         uncle.Recolour(Colour.Black);
@@ -128,9 +129,9 @@ namespace Lab1_RBTree
                     }
                     else
                     {
-                        if (newNode == newNode.Parent.Right) // Fixed misplaced semicolon
+                        if (newNode == newNode.Parent.Right)
                         {
-                            newNode = newNode.Parent; // Fixed incorrect comparison operator
+                            newNode = newNode.Parent;
                             LeftRotate(newNode);
                         }
                         newNode.Parent.Recolour(Colour.Black);
@@ -138,63 +139,62 @@ namespace Lab1_RBTree
                         RightRotate(newNode.Parent.Parent);
                     }
                 }
-                else if (newNode.Parent == newNode.Parent.Parent.Right) // Fixed "elseif" to "else if"
+                else if (newNode.Parent == newNode.Parent.Parent.Right)
                 {
-                    var uncle = newNode.Parent.Parent.Left; // Fixed incorrect comma
-                    if (uncle.Colour == Colour.Red)
+                    var uncle = newNode.Parent.Parent.Left;
+                    if (uncle != Nil && uncle.Colour == Colour.Red)
                     {
                         newNode.Parent.Recolour(Colour.Black);
-                        uncle.Recolour(Colour.Black); // Fixed missing "Colour." for Black
+                        uncle.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
                         newNode = newNode.Parent.Parent;
                     }
                     else
                     {
-                        if (newNode == newNode.Parent.Left) // Fixed missing parentheses
+                        if (newNode == newNode.Parent.Left)
                         {
                             newNode = newNode.Parent;
                             RightRotate(newNode);
                         }
-                        newNode.Parent.Recolour(Colour.Black); // Fixed extra closing parenthesis
-                        newNode.Parent.Parent.Recolour(Colour.Red); // Fixed incorrect property access
-                        LeftRotate(newNode.Parent.Parent); // Fixed incorrect argument
+                        newNode.Parent.Recolour(Colour.Black);
+                        newNode.Parent.Parent.Recolour(Colour.Red);
+                        LeftRotate(newNode.Parent.Parent);
                     }
                 }
-                if (newNode.Parent == Nil) { break; } // Fixed incorrect recoloring logic
             }
             Root.Recolour(Colour.Black);
         }
 
 
-        // GPT
+        // Gemini
         public void Insert(TElement element)
         {
             var newNode = new RBNode<TElement>(element, Nil);
             var newNodeParent = Nil;
             var currentNode = Root;
 
-            while (currentNode != Nil) // Fixed comparison operator
+            while (currentNode != Nil)
             {
                 newNodeParent = currentNode;
 
                 if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
-                else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; } // Fixed comparison operator
-                else { return; } // Fixed missing closing brace
+                else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
+                else { return; }
             }
 
-            Count++; // Fixed missing semicolon
+            Count++;
             newNode.Parent = newNodeParent;
 
             if (newNodeParent == Nil)
             {
                 Root = newNode;
-                Root.Recolour(Colour.Black); // Fixed initial root color
+                Root.Recolour(Colour.Black);
                 return;
             }
             else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0) { newNodeParent.Left = newNode; }
-            else { newNodeParent.Right = newNode; } // Fixed unnecessary extra condition
+            else if (newNode.Data.CompareTo(newNodeParent!.Data) > 0) { newNodeParent.Right = newNode; }
 
-            InsertFixup(newNode); // Fixed incorrect colon
+            InsertFixup(newNode);
         }
 
 
