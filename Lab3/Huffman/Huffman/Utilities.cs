@@ -16,14 +16,14 @@ namespace Huffman
             return (byte)Convert.ToInt32(str, 2);
         }
 
-        // Gpt
+        // Gem
 
         public static string BinStrToStr(string str)
         {
             string[] binarySegments = SplitBinaryString(str, 8);
 
             StringBuilder stringBuilder = new();
-            foreach (var segment in binarySegments)
+            foreach (string segment in binarySegments)
             {
                 int decimalValue = Convert.ToInt32(segment, 2);
                 char character = Convert.ToChar(decimalValue);
