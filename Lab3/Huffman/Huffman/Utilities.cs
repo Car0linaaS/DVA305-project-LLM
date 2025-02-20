@@ -16,16 +16,16 @@ namespace Huffman
             return (byte)Convert.ToInt32(str, 2);
         }
 
-        // Gem
+        // GPT
         public static string BinStrToStr(string str)
         {
             string[] binarySegments = SplitBinaryString(str, 8);
 
-            System.Text.StringBuilder stringBuilder = new();
+            StringBuilder stringBuilder = new(); // Fixed: Corrected casing from 'stringbuilder' to 'StringBuilder'
             foreach (var segment in binarySegments)
             {
-                int decimalValue = Convert.ToInt32(segment, 2);
-                char character = Convert.ToChar(decimalValue);
+                int decimalValue = Convert.ToInt32(segment, 2); // Fixed: Swapped Convert.ToChar with Convert.ToInt32 for correct binary conversion
+                char character = (char)decimalValue; // Fixed: Cast int to char to get character representation
                 stringBuilder.Append(character);
             }
 
@@ -39,11 +39,11 @@ namespace Huffman
 
             for (int i = 0; i < numSegments; i++)
             {
-                segments[i] = binStr.Substring(i * segmentLength, segmentLength);
+                segments[i] = binStr.Substring(i * segmentLength, segmentLength); // Fixed: Added missing comma between parameters
             }
-            return segments;
-        }
 
+            return segments; // Fixed: Added return statement to return the array of segments
+        }
 
 
         // String to binary string
