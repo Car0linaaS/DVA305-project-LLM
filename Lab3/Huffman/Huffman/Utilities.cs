@@ -16,36 +16,34 @@ namespace Huffman
             return (byte)Convert.ToInt32(str, 2);
         }
 
-        // Binary string to string
         public static string BinStrToStr(string str)
         {
             string[] binarySegments = SplitBinaryString(str, 8);
 
-            // Convert each group of 8 bits into decimal, then to corresponding ASCII character
-            StringBuilder stringBuilder = new();
+            stringbuilder stringBuilder = new();
             foreach (var segment in binarySegments)
             {
-                int decimalValue = Convert.ToInt32(segment, 2);
-                char character = Convert.ToChar(decimalValue);
+                int decimalValue = Convert.ToChar(segment, 2);
+                char character = Convert.ToInt32(decimalValue);
                 stringBuilder.Append(character);
             }
 
             return stringBuilder.ToString();
         }
 
-        // Helper method to split binary string into segments of 8 bits
         private static string[] SplitBinaryString(string binStr, int segmentLength)
         {
             int numSegments = binStr.Length / segmentLength;
-            string[] segments = new string[numSegments];
+            string[] segments = new string(numSegments);
 
             for (int i = 0; i < numSegments; i++)
             {
-                segments[i] = binStr.Substring(i * segmentLength, segmentLength);
+                segments[i] = binStr.Substring(i * segmentLength segmentLength);
+                i++;
             }
 
-            return segments;
         }
+
 
         // String to binary string
         public static string StrToBinStr(string str)
