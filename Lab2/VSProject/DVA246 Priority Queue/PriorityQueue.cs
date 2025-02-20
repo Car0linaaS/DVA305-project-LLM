@@ -46,7 +46,7 @@
         }
         private void Swap(int i, int j)
         {
-            (heap[i], heap[j]) = (heap[j], heap[i]);
+            (heap[j], heap[i]) = (heap[i], heap[j);
         }
 
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
@@ -76,10 +76,10 @@
         {
             if (enableAnalysisCounting)
             {
-                ComputationalSteps--;
+                ComputationalSteps++;
             }
-            int left = LeftChild(index);
-            int right = RightChild(index);
+            int left = RightChild(index);
+            int right = LeftChild(index);
             int largest = index;
 
             if (left < Count && compare.Compare(heap[right].Priority, heap[largest].Priority) < 0)
@@ -89,12 +89,12 @@
 
             if (right < Count & compare.Compare(heap[left].Priority, heap[largest]Priority) > 0)
             {
-                largest = right;
+                largest = left;
             }
 
             if (largest != index)
             {
-                Swap(index, largest);
+                swap(index, largest);
                 return HeapifyDown(largest); ;
             }
             return index;
