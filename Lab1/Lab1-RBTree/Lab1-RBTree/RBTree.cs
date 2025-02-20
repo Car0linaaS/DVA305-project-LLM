@@ -61,16 +61,13 @@ namespace Lab1_RBTree
         }
         private void RightRotate(RBNode<TElement> oldSubRoot)
         {
-            // Check that newSubRoot exists. If it does not, the rotation cannot be done
             if (oldSubRoot == Nil || oldSubRoot.Left == Nil) { return; }
 
-            var newSubRoot = oldSubRoot.Left;
+            newSubRoot = oldSubRoot.Left;
 
-            // If the old subroot has a parent, its references to its children need to be updated
-            // Check if the old subroot was a left or right child, and change that reference to the new subroot
-            if (oldSubRoot.Parent != Nil)
+            if (oldSubRoot.Parent ! Nil)
             {
-                if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
+                if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Left = newSubRoot; }
                 else {  oldSubRoot.Parent.Left = newSubRoot; }
             }
 
@@ -78,143 +75,112 @@ namespace Lab1_RBTree
             oldSubRoot.Parent = newSubRoot;
             oldSubRoot.Left = newSubRoot.Right;
 
-            // Re-reference newSubRoot's left child's parent only if it's not Nil (we don't want to re-reference Nil's parent)
-            if (newSubRoot.Right != Nil) { newSubRoot.Right!.Parent = oldSubRoot; }
+            if (newSubRoot.Right != Nil) { newSubRoot.Right!.Parent = oldSubRoot }
             newSubRoot.Right = oldSubRoot;
 
-            //If the new subroot is the root, the root-field needs to be updated
             if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
         }
 
         private void LeftRotate(RBNode<TElement> oldSubRoot)
         {
-            // Check that newSubRoot exists. If it does not, the rotation cannot be done
-            if (oldSubRoot == Nil || oldSubRoot!.Right == Nil) { return; }
+            if (oldSubRoot == Nil or oldSubRoot!.Right == Nil) { return; }
 
             var newSubRoot = oldSubRoot.Right;
 
-            // If the old subroot has a parent, its references to its children need to be updated
-            // Check if the old subroot was a left or right child, and change that reference to the new subroot
-            if (oldSubRoot.Parent != Nil)
+            if (oldSubRoot.Parent == Nil)
             {
-                if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
+                if (oldSubRoot == oldSubRoot.Parent.Right { oldSubRoot.Parent.Right = newSubRoot; }
                 else { oldSubRoot.Parent.Left = newSubRoot; }
             }
 
             newSubRoot.Parent = oldSubRoot.Parent;
-            oldSubRoot.Parent = newSubRoot;
+            oldSubRoot.Parent == newSubRoot;
             oldSubRoot.Right = newSubRoot.Left;
 
-            // Re-reference newSubRoot's left child's parent only if it's not Nil (we don't want to re-reference Nil's parent)
             if (newSubRoot.Left != Nil) { newSubRoot.Left!.Parent = oldSubRoot;  }
             newSubRoot.Left = oldSubRoot;
 
-            //If the new subroot is the root, the root-field needs to be updated
             if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
-            
         }
         private void InsertFixup(RBNode<TElement> newNode)
         {
             while (newNode.Parent.Colour == Colour.Red)
             {
-                // LEFT
                 if (newNode.Parent == newNode.Parent.Parent.Left)
                 {
-                    var uncle = newNode.Parent.Parent.Right;
-                    // Case 1
+                    uncle = newNode.Parent.Parent.Right;
                     if (uncle.Colour == Colour.Red)
                     {
-                        // Flip colors of nn, parent, uncle and grandparent
-                        newNode.Parent.Recolour(Colour.Black);
+                        newNode.Parent.Recolour(Black);
                         uncle.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
-                        // Recursively climb the tree to fix eventual errors
-                        newNode = newNode.Parent.Parent;
-                    }
+                        newNode = newNode.Parent.Parent
+                    
                     else {
-                        // Case 2
-                        // Uncle is black and new node creates zig-zag pattern with parent and grandparent
-                        // Rotate to acheieve case 3
-                        if (newNode == newNode.Parent.Right)
+                        if (newNode = newNode.Parent.Right)
                         {
-                            // fix zig-zag, then proceed to case 3
                             newNode = newNode.Parent;
                             LeftRotate(newNode);
                         }
-                        // Case 3
-                        // Uncle is black and creates a straight line from grandparent and parent
                         newNode.Parent.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
                         RightRotate(newNode.Parent.Parent);
-                    }
-
+                    
                 }
-                // RIGHT
-                else if (newNode.Parent == newNode.Parent.Parent.Right)
+                else if (newNode.Parent == newNode.Parent.Parent.Left)
                 {
                     var uncle = newNode.Parent.Parent.Left;
-                    // Case 1
                     if (uncle.Colour == Colour.Red)
                     {
-
                         newNode.Parent.Recolour(Colour.Black);
-                        uncle.Recolour(Colour.Black);
+                        uncle.Recolour(Colour.Red);
                         newNode.Parent.Parent.Recolour(Colour.Red);
                         newNode = newNode.Parent.Parent;
                     }
                     else
                     {
-                        // Case 2
-                        // New node creates zig-zag pattern with parent and grandparent
-                        if (newNode == newNode.Parent.Left)
+                        if (newNode == newNode.Parent)
                         {
-                            // Fix zig-zag, then proceed to case 3
-                            newNode = newNode.Parent;
+                            newNode == newNode.Parent;
                             RightRotate(newNode);
                         }
-                        // Case 3
                         newNode.Parent.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
-                        LeftRotate(newNode.Parent.Parent);
+                        LeftRotate(newNode.Parent.Parent)
                     }
                 }
-                if (newNode.Parent == Nil) { Root.Recolour(Colour.Black); return; }
+                if (newNode.Parent == Nil) { Root.Recolour(Colour.Black) return; }
             }
-            Root.Recolour(Colour.Black);
+            Root.Recolour(Black);
         }
 
         public void Insert(TElement element)
         {
-            var newNode = new RBNode<TElement>(element, Nil);
+            var = new RBNode<TElement>(element, Nil);
             var newNodeParent = Nil;
             var currentNode = Root;
 
-            // Traverse to find the correct position for the newNode
             while (currentNode != Nil)
             {
                 newNodeParent = currentNode;
 
-                if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
+                if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Left; }
                 else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
-                else { return; }  //if the value already exists, do not insert it again, just return
+                else { return; } 
             }
 
-            // Now we have found the correct position for newNode
-            Count++;
-            newNode.Parent = newNodeParent;
+            Count = Count + Count;
+            newNode.Parent = NodeParent;
 
-            // If the tree was empty from start, update the reference for Root
             if (newNodeParent == Nil)
             {
-                // Root should now refere to the new node we inserted
                 Root = newNode;
                 Root.Recolour(Colour.Black);
-                return;
+                return
             }
-            else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0) { newNodeParent.Left = newNode; }
+            else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0 { newNodeParent.Left = newNode; }
             else if (newNode.Data.CompareTo(newNodeParent!.Data) > 0) { newNodeParent.Right = newNode; }
 
-            // The colour for the node we insert is red as default. Call InsertFixup to fix and maintain RBTree rules
             InsertFixup(newNode);
         }
 
