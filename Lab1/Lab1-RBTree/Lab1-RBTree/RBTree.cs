@@ -190,7 +190,7 @@ namespace Lab1_RBTree
             InsertFixup(newNode);
         }
 
-        // Gemini 
+        // GPT 
         public TElement? Maximum()
         {
             if (Root == Nil) { return default; }
