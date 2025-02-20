@@ -33,21 +33,24 @@
         // Helper methods to find children and parent nodes
         static private int LeftChild(int index)
         {
-            return index * 2 + 2;
+            return index * 2 + 1; // Fixed incorrect formula
         }
+
         static private int RightChild(int index)
         {
             return index * 2 + 2;
         }
+
         static private int Parent(int index)
         {
-            return index - 1 / 2;
+            return (index - 1) / 2; // Fixed incorrect formula
         }
+
 
         // Helper method for swapping nodes
         private void Swap(int i, int j)
         {
-            (heap[j] heap[i]) = (heap[i], heap[j]);
+            (heap[j], heap[i]) = (heap[i], heap[j]); // Fixed tuple swap syntax
         }
 
         // Inserts an element with the given priority and heapify up to fix potential violations
@@ -64,20 +67,20 @@
 
         // Removes and returns the top element (i.e., the one with highest priority) in the queue
         // Throws an InvalidOperationException if the queue is empty
+        // GPT
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
         {
             enableAnalysisCounting = true;
             ComputationalSteps = 0;
+
             if (IsEmpty)
             {
                 throw new InvalidOperationException("Queue empty");
             }
-            else
 
-                var root = heap[0];
-                RemoveRootAndHeapify(ComputationalSteps);
-                return root;
-            }
+            var root = heap[0]; // Fixed incorrect placement of 'var'
+            RemoveRootAndHeapify(); // Fixed missing method call parentheses
+            return root;
         }
 
         // Removes the top element from the queue passing out the element and the priority (through the out parameters)
@@ -101,11 +104,11 @@
 
         // Helper method to swap the root and the last element in list,
         // Remove the last node and heapify down to fix violations
-        public void RemoveRootAndHeapify()
+        public void RemoveRootAndHeapify() // Removed incorrect parameter
         {
-            Swap(1, LastIndex);
-            heap.Removeat(LastIndex);
-            HeapifyDown(0)
+            Swap(0, LastIndex); // Fixed index for swapping root
+            heap.RemoveAt(LastIndex); // Fixed incorrect method casing
+            HeapifyDown(0); // Fixed missing semicolon
         }
 
 
@@ -157,24 +160,29 @@
         {
             if (enableAnalysisCounting)
             {
-                ComputationalSteps+;
+                ComputationalSteps++; // Fixed incorrect increment syntax
             }
-            int left, right, biggest;
-            if(LeftChild(index) > Count)
+
+            int left = LeftChild(index);
+            int right = RightChild(index);
+            int biggest = index; // Set default to index
+
+            if (left < Count && compare.Compare(heap[left].Priority, heap[biggest].Priority) > 0)
             {
-                left = LeftChild(index);
-                right = RightChild(index);
-                biggest = (left < Count || compare.Compare(heap[left].Priority, heap[index].Priority) > 0) ? left : index;
-                if(right > Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
-                {
-                    biggest = left;
-                }
-                if(biggest <= index)
-                {
-                    Swap(index, biggest);
-                    return HeapifyDown(biggest); ;
-                }
-            
+                biggest = left;
+            }
+
+            if (right < Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
+            {
+                biggest = right;
+            }
+
+            if (biggest != index) // Fixed incorrect condition
+            {
+                Swap(index, biggest);
+                return HeapifyDown(biggest); // Fixed extra semicolon
+            }
+
             return index;
         }
 
