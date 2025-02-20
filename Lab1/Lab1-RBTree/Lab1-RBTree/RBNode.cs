@@ -25,7 +25,7 @@ namespace Lab1_RBTree
             Right = Nil;
             Colour = Colour.Red;
         }
-
-        public void Recolour(Colour colour { Colour = colour; }
+        // GPT
+        public void Recolour(Colour colour) { this.Colour = colour; } // Fixed incorrect method declaration
     }
 }

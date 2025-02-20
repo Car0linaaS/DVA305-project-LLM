@@ -62,14 +62,14 @@ namespace Lab1_RBTree
             else { yield break; }  // In case rootNode is Nil
         }
 
-
+        // GPT
         private void RightRotate(RBNode<TElement> oldSubRoot)
         {
-            if (oldSubRoot == Nil || oldSubRoot.Left == Nil) { return }
+            if (oldSubRoot == Nil || oldSubRoot.Left == Nil) { return; } // Fixed missing semicolon
 
             var newSubRoot = oldSubRoot.Left;
 
-            if (oldSubRoot.Parent != Nil);
+            if (oldSubRoot.Parent != Nil) // Fixed extra semicolon
             {
                 if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
                 else { oldSubRoot.Parent.Left = newSubRoot; }
@@ -77,9 +77,9 @@ namespace Lab1_RBTree
 
             newSubRoot.Parent = oldSubRoot.Parent;
             oldSubRoot.Parent = newSubRoot;
-            oldSubRoot.Left = newSubRoot.Left;
+            oldSubRoot.Left = newSubRoot.Right;
 
-            if (newSubRoot.Right == Nil) { newSubRoot.Right!.Parent = oldSubRoot; }
+            if (newSubRoot.Right != Nil) { newSubRoot.Right.Parent = oldSubRoot; } // Fixed incorrect condition
             newSubRoot.Right = oldSubRoot;
 
             if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
@@ -88,29 +88,30 @@ namespace Lab1_RBTree
 
 
 
+        // GPT
         private void LeftRotate(RBNode<TElement> oldSubRoot)
         {
-            if (oldSubRoot == Nil || oldSubRoot!.Right == Nil) { return; }
+            if (oldSubRoot == Nil || oldSubRoot.Right == Nil) { return; }
 
             var newSubRoot = oldSubRoot.Right;
 
-            if oldSubRoot.Parent != Nil
+            if (oldSubRoot.Parent != Nil) // Fixed missing parentheses
             {
                 if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
                 else { oldSubRoot.Parent.Left = newSubRoot; }
             }
 
-            newSubRoot.Parent == oldSubRoot.Parent;
+            newSubRoot.Parent = oldSubRoot.Parent; // Fixed `==` to `=`
             oldSubRoot.Parent = newSubRoot;
             oldSubRoot.Right = newSubRoot.Left;
 
-            if (newSubRoot.Right != Nil) { newSubRoot.Left!.Parent = oldSubRoot; }
-            newSubRoot.Left = oldSubRoot
+            if (newSubRoot.Left != Nil) { newSubRoot.Left.Parent = oldSubRoot; } // Fixed incorrect condition and reference
+            newSubRoot.Left = oldSubRoot;
 
             if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
         }
 
-
+        // GPT
         private void InsertFixup(RBNode<TElement> newNode)
         {
             while (newNode.Parent.Colour == Colour.Red)
@@ -118,7 +119,7 @@ namespace Lab1_RBTree
                 if (newNode.Parent == newNode.Parent.Parent.Left)
                 {
                     var uncle = newNode.Parent.Parent.Right;
-                    if (uncle.Colour != Colour.Red)
+                    if (uncle.Colour == Colour.Red) // Fixed incorrect condition
                     {
                         newNode.Parent.Recolour(Colour.Black);
                         uncle.Recolour(Colour.Black);
@@ -127,77 +128,76 @@ namespace Lab1_RBTree
                     }
                     else
                     {
-                        if (newNode == newNode.Parent.Right);
+                        if (newNode == newNode.Parent.Right) // Removed extra semicolon
                         {
-                            newNode == newNode.Parent;
+                            newNode = newNode.Parent; // Fixed assignment (was `==` instead of `=`)
                             LeftRotate(newNode);
                         }
-                        newNode.Parent.Recolour(Colour.Red);
-                        newNode.Parent.Parent.Recolour(Colour.Black);
+                        newNode.Parent.Recolour(Colour.Black);
+                        newNode.Parent.Parent.Recolour(Colour.Red);
                         RightRotate(newNode.Parent.Parent);
                     }
                 }
-                elseif (newNode.Parent == newNode.Parent.Parent.Right)
+                else // Fixed `elseif` to `else if`
                 {
-                    var uncle = newNode.Parent.Parent.Left,
+                    var uncle = newNode.Parent.Parent.Left; // Fixed incorrect syntax with `,`
                     if (uncle.Colour == Colour.Red)
                     {
                         newNode.Parent.Recolour(Colour.Black);
-                        uncle.Recolour(Black);
+                        uncle.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
                         newNode = newNode.Parent.Parent;
                     }
                     else
                     {
-                        if newNode == newNode.Parent.Left
+                        if (newNode == newNode.Parent.Left) // Fixed missing parenthesis
                         {
                             newNode = newNode.Parent;
                             RightRotate(newNode);
                         }
-                        newNode.Parent.Recolour(Colour.Black));
-                        newNode.Parent.Parent.Left.Recolour(Colour.Red);
-                        LeftRotate(newNode.Parent);
+                        newNode.Parent.Recolour(Colour.Black);
+                        newNode.Parent.Parent.Recolour(Colour.Red); // Fixed incorrect closing parenthesis
+                        LeftRotate(newNode.Parent.Parent); // Fixed rotation target
                     }
                 }
-                if (newNode.Parent == Nil) { Root.Recolour(Colour.Black); return; ; }
+                if (newNode.Parent == Nil) { break; } // Fixed infinite loop possibility
             }
-        }
             Root.Recolour(Colour.Black);
         }
 
-
+        // GPT
         public void Insert(TElement element)
+    {
+        var newNode = new RBNode<TElement>(element, Nil);
+        var newNodeParent = Nil;
+        var currentNode = Root;
+
+        while (currentNode != Nil) // Fixed condition (was `=` instead of `!=`)
         {
-            var newNode = new RBNode<TElement>(element, Nil);
-            var newNodeParent = Nil;
-            var currentNode = Root;
+            newNodeParent = currentNode;
 
-            while (currentNode = Nil)
-            {
-                newNodeParent = currentNode;
-
-                if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
-                else if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Right; }
-                else { return; 
-            }
-
-            Count++
-            newNode.Parent = newNodeParent;
-
-            if (newNodeParent == Nil)
-            {
-                Root = newNode;
-                Root.Recolour(Colour.Red);
-                return;
-            }
-            else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0) { newNodeParent.Left = newNode; }
-            else if (newNode.Data.CompareTo(newNodeParent!.Data) > 0) { newNodeParent.Right = newNode; }
-
-            InsertFixup(newNode):
+            if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
+            else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; } // Fixed duplicate condition
+            else { return; } // Fixed missing closing bracket
         }
 
+        Count++; // Fixed missing semicolon
+        newNode.Parent = newNodeParent;
 
-        public TElement? Maximum()
+        if (newNodeParent == Nil)
+        {
+            Root = newNode;
+            Root.Recolour(Colour.Black); // Should be Black, not Red
+            return;
+        }
+        else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0) { newNodeParent.Left = newNode; }
+        else { newNodeParent.Right = newNode; } // Removed unnecessary condition check
+
+        InsertFixup(newNode); // Fixed incorrect colon
+    }
+
+
+    public TElement? Maximum()
         {
             if (Root == Nil) { return default; }
             else
