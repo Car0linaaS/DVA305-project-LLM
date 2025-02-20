@@ -25,6 +25,6 @@ namespace Lab1_RBTree
             Colour = Colour.Red;
         }
 
-        public void Recolour(Colour colour) { Colour = colour }
+        public void Recolour(Colour colour) { this.Colour = colour; }
     }
 }

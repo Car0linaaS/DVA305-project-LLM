@@ -24,7 +24,7 @@ namespace Lab1_RBTree
             Root = Nil;
             Nil.Recolour(Colour.Black);
         }
-       
+
         // This GetEnumerator returns a generic enumerator, that can be used to traverse the set using a foreach loop
         public IEnumerator<TElement> GetEnumerator()
         {
@@ -59,65 +59,64 @@ namespace Lab1_RBTree
             }
             else { yield break; }  // In case rootNode is Nil
         }
+
+        // GPT
         private void RightRotate(RBNode<TElement> oldSubRoot)
         {
             if (oldSubRoot == Nil || oldSubRoot.Left == Nil) { return; }
 
-            newSubRoot = oldSubRoot.Left;
+            var newSubRoot = oldSubRoot.Left;
 
-            if (oldSubRoot.Parent ! Nil)
-            {
-                if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Left = newSubRoot; }
-                else {  oldSubRoot.Parent.Left = newSubRoot; }
-            }
+            oldSubRoot.Left = newSubRoot.Right;
+            if (newSubRoot.Right != Nil) { newSubRoot.Right!.Parent = oldSubRoot; }
 
             newSubRoot.Parent = oldSubRoot.Parent;
-            oldSubRoot.Parent = newSubRoot;
-            oldSubRoot.Left = newSubRoot.Right;
 
-            if (newSubRoot.Right != Nil) { newSubRoot.Right!.Parent = oldSubRoot }
+            if (oldSubRoot.Parent == Nil) { Root = newSubRoot; }
+            else if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
+            else { oldSubRoot.Parent.Left = newSubRoot; }
+
             newSubRoot.Right = oldSubRoot;
-
-            if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
+            oldSubRoot.Parent = newSubRoot;
         }
 
+        // GPT
         private void LeftRotate(RBNode<TElement> oldSubRoot)
         {
-            if (oldSubRoot == Nil or oldSubRoot!.Right == Nil) { return; }
+            if (oldSubRoot == Nil || oldSubRoot!.Right == Nil) { return; }
 
             var newSubRoot = oldSubRoot.Right;
 
-            if (oldSubRoot.Parent == Nil)
-            {
-                if (oldSubRoot == oldSubRoot.Parent.Right { oldSubRoot.Parent.Right = newSubRoot; }
-                else { oldSubRoot.Parent.Left = newSubRoot; }
-            }
+            oldSubRoot.Right = newSubRoot.Left;
+            if (newSubRoot.Left != Nil) { newSubRoot.Left!.Parent = oldSubRoot; }
 
             newSubRoot.Parent = oldSubRoot.Parent;
-            oldSubRoot.Parent == newSubRoot;
-            oldSubRoot.Right = newSubRoot.Left;
 
-            if (newSubRoot.Left != Nil) { newSubRoot.Left!.Parent = oldSubRoot;  }
+            if (oldSubRoot.Parent == Nil) { Root = newSubRoot; }
+            else if (oldSubRoot == oldSubRoot.Parent.Left) { oldSubRoot.Parent.Left = newSubRoot; }
+            else { oldSubRoot.Parent.Right = newSubRoot; }
+
             newSubRoot.Left = oldSubRoot;
-
-            if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
+            oldSubRoot.Parent = newSubRoot;
         }
+        // GPT
         private void InsertFixup(RBNode<TElement> newNode)
         {
             while (newNode.Parent.Colour == Colour.Red)
             {
                 if (newNode.Parent == newNode.Parent.Parent.Left)
                 {
-                    uncle = newNode.Parent.Parent.Right;
-                    if (uncle.Colour == Colour.Red)
+                    var uncle = newNode.Parent.Parent.Right;
+                    if (uncle != Nil && uncle.Colour == Colour.Red)
                     {
-                        newNode.Parent.Recolour(Black);
+                        newNode.Parent.Recolour(Colour.Black);
                         uncle.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
-                        newNode = newNode.Parent.Parent
-                    
-                    else {
-                        if (newNode = newNode.Parent.Right)
+                        newNode = newNode.Parent.Parent;
+                    }
+                    else
+                    {
+                        if (newNode == newNode.Parent.Right)
                         {
                             newNode = newNode.Parent;
                             LeftRotate(newNode);
@@ -125,38 +124,39 @@ namespace Lab1_RBTree
                         newNode.Parent.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
                         RightRotate(newNode.Parent.Parent);
-                    
+                    }
                 }
-                else if (newNode.Parent == newNode.Parent.Parent.Left)
+                else
                 {
                     var uncle = newNode.Parent.Parent.Left;
-                    if (uncle.Colour == Colour.Red)
+                    if (uncle != Nil && uncle.Colour == Colour.Red)
                     {
                         newNode.Parent.Recolour(Colour.Black);
-                        uncle.Recolour(Colour.Red);
+                        uncle.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
                         newNode = newNode.Parent.Parent;
                     }
                     else
                     {
-                        if (newNode == newNode.Parent)
+                        if (newNode == newNode.Parent.Left)
                         {
-                            newNode == newNode.Parent;
+                            newNode = newNode.Parent;
                             RightRotate(newNode);
                         }
                         newNode.Parent.Recolour(Colour.Black);
                         newNode.Parent.Parent.Recolour(Colour.Red);
-                        LeftRotate(newNode.Parent.Parent)
+                        LeftRotate(newNode.Parent.Parent);
                     }
                 }
-                if (newNode.Parent == Nil) { Root.Recolour(Colour.Black) return; }
             }
-            Root.Recolour(Black);
+
+            Root.Recolour(Colour.Black);
         }
 
+        // GPT
         public void Insert(TElement element)
         {
-            var = new RBNode<TElement>(element, Nil);
+            var newNode = new RBNode<TElement>(element, Nil);
             var newNodeParent = Nil;
             var currentNode = Root;
 
@@ -164,105 +164,106 @@ namespace Lab1_RBTree
             {
                 newNodeParent = currentNode;
 
-                if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Left; }
+                if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
                 else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
-                else { return; } 
+                else { return; }
             }
 
-            Count = Count + Count;
-            newNode.Parent = NodeParent;
+            Count = Count + 1;
+            newNode.Parent = newNodeParent;
 
             if (newNodeParent == Nil)
             {
                 Root = newNode;
                 Root.Recolour(Colour.Black);
-                return
+                return;
             }
-            else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0 { newNodeParent.Left = newNode; }
-            else if (newNode.Data.CompareTo(newNodeParent!.Data) > 0) { newNodeParent.Right = newNode; }
+            else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0) { newNodeParent.Left = newNode; }
+            else { newNodeParent.Right = newNode; }
 
             InsertFixup(newNode);
         }
 
-        public TElement? Maximum()
+
+                public TElement? Maximum()
+                {
+                    if (Root == Nil) { return default; }
+                    else
+                    {
+                        var temp = Root;
+                        while (temp.Right != Nil) { temp = temp.Right; }
+                        return temp.Data;
+                    }
+                }
+
+                public TElement? Minimum()
+                {
+                    if (Root == Nil) { return default; }
+                    else
+                    {
+                        var temp = Root;
+                        while (temp.Left != Nil) { temp = temp.Left; }
+                        return temp.Data;
+                    }
+                }
+                // Predecessor() returns the largest element that is strictly smaller than element, or null if there is no such element.
+                public TElement? Predecessor(TElement element)
+                {
+                    if (Root == Nil) { return null; }
+
+                    var temp = Root;
+                    TElement? predecessor = null;
+
+                    while (temp != Nil)
+                    {
+                        if (temp.Data.CompareTo(element) > 0 || temp.Data.CompareTo(element) == 0) { temp = temp.Left; }
+                        else if (temp.Data.CompareTo(element) < 0) { predecessor = temp.Data; temp = temp.Right; }
+                    }
+
+                    return predecessor;
+                }
+
+                public bool Search(TElement element)
+                {
+                    var currentNode = Root;
+
+                    while (currentNode != Nil)
+                    {
+                        if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
+                        else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
+                        else { return true; }
+                    }
+
+                    return false;
+                }
+
+                // Successor() returns the smallest element that is strictly larger than element or null if there is no such element.
+                public TElement? Successor(TElement element)
+                {
+                    if (Root == Nil) { return null; }
+
+                    var temp = Root;
+                    TElement? successor = null;
+
+                    while (temp != Nil)
+                    {
+                        if (temp.Data.CompareTo(element) < 0 || temp.Data.CompareTo(element) == 0) { temp = temp.Right; }
+                        else if (temp.Data.CompareTo(element) > 0) { successor = temp.Data; temp = temp.Left; }
+                    }
+
+                    return successor;
+                }
+
+                public void UnionWith(IEnumerable<TElement> other)
+                {
+                    foreach (var element in other) { Insert(element); }
+                }
+
+                // This method returns a non-generic enumerator. It is done by calling the generic GetEnumerator.
+                IEnumerator IEnumerable.GetEnumerator()
         {
-            if (Root == Nil) { return default; }
-            else
-            {
-                var temp = Root;
-                while (temp.Right != Nil) { temp = temp.Right; }
-                return temp.Data;
+                    return GetEnumerator();
+                }
+
             }
         }
-
-        public TElement? Minimum()
-        {
-            if (Root == Nil) { return default; }
-            else
-            {
-                var temp = Root;
-                while (temp.Left != Nil) { temp = temp.Left; }
-                return temp.Data;
-            }
-        }
-        // Predecessor() returns the largest element that is strictly smaller than element, or null if there is no such element.
-        public TElement? Predecessor(TElement element)
-        {
-            if(Root == Nil) { return null; }
-
-            var temp = Root;
-            TElement? predecessor = null;
-
-            while (temp != Nil)
-            {
-                if (temp.Data.CompareTo(element) > 0 || temp.Data.CompareTo(element) == 0) { temp = temp.Left; }
-                else if (temp.Data.CompareTo(element) < 0) { predecessor = temp.Data; temp = temp.Right; }
-            }
-
-            return predecessor;
-        }
-
-        public bool Search(TElement element)
-        {
-            var currentNode = Root;
-
-            while (currentNode != Nil)
-            {
-                if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
-                else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
-                else { return true; }
-            }
-
-            return false;
-        }
-
-        // Successor() returns the smallest element that is strictly larger than element or null if there is no such element.
-        public TElement? Successor(TElement element)
-        {
-            if (Root == Nil) { return null; }
-
-            var temp = Root;
-            TElement? successor = null;
-
-            while (temp != Nil)
-            {
-                if (temp.Data.CompareTo(element) < 0 || temp.Data.CompareTo(element) == 0) { temp = temp.Right; }
-                else if (temp.Data.CompareTo(element) > 0) { successor = temp.Data; temp = temp.Left; }
-            }
-
-            return successor;
-        }
-
-        public void UnionWith(IEnumerable<TElement> other)
-        {
-            foreach (var element in other) { Insert(element); }
-        }
-
-        // This method returns a non-generic enumerator. It is done by calling the generic GetEnumerator.
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-    }
-}
