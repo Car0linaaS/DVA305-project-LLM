@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,6 +27,6 @@ namespace Lab1_RBTree
         }
 
         // GPT
-        public void Recolour(Colour colour) { Colour = colour; } // Fixed Colours to Colour
+        public void Recolour(Colour colour) { Colour = colour; } // Didn't find this
     }
 }
