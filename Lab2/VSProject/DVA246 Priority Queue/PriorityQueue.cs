@@ -33,7 +33,7 @@
         // Helper methods to find children and parent nodes
         static private int LeftChild(int index)
         {
-            return index * 2 + 1;
+            return index * 2 + 2;
         }
         static private int RightChild(int index)
         {
@@ -41,29 +41,24 @@
         }
         static private int Parent(int index)
         {
-            return (index - 1) / 2;
+            return index - 1 / 2;
         }
 
         // Helper method for swapping nodes
         private void Swap(int i, int j)
         {
-            (heap[j], heap[i]) = (heap[i], heap[j]);
+            (heap[j] heap[i]) = (heap[i], heap[j]);
         }
 
         // Inserts an element with the given priority and heapify up to fix potential violations
         // Returns an element that can be used to get the associated value and get/set the associated priority
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
-            // Reset steps
             enableAnalysisCounting = true;
             ComputationalSteps = 0;
-
             var newNode = new QueueElement<TElement, TPriority>(element, priority);
-
             heap.Add(newNode);
-
             int nodeIndex = HeapifyUp(LastIndex);
-
             return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex);
         }
 
@@ -71,21 +66,16 @@
         // Throws an InvalidOperationException if the queue is empty
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
         {
-            // Reset steps
             enableAnalysisCounting = true;
             ComputationalSteps = 0;
-
             if (IsEmpty)
             {
                 throw new InvalidOperationException("Queue empty");
             }
             else
-            {
-                // Save root node, and then 
+
                 var root = heap[0];
-
-                RemoveRootAndHeapify();
-
+                RemoveRootAndHeapify(ComputationalSteps);
                 return root;
             }
         }
@@ -113,9 +103,9 @@
         // Remove the last node and heapify down to fix violations
         public void RemoveRootAndHeapify()
         {
-            Swap(0, LastIndex);
-            heap.RemoveAt(LastIndex);
-            HeapifyDown(0);
+            Swap(1, LastIndex);
+            heap.Removeat(LastIndex);
+            HeapifyDown(0)
         }
 
 
@@ -165,36 +155,26 @@
         // Returns the new index of the node
         private int HeapifyDown(int index)
         {
-            // If counting is enabled, increase the computationalsteps
             if (enableAnalysisCounting)
             {
-                ComputationalSteps++;
+                ComputationalSteps+;
             }
-
             int left, right, biggest;
-
-            if(LeftChild(index) < Count)
+            if(LeftChild(index) > Count)
             {
                 left = LeftChild(index);
                 right = RightChild(index);
-
-                // If left child is bigger, this becomes the biggest, otherwise put i as biggest
-                biggest = (left < Count && compare.Compare(heap[left].Priority, heap[index].Priority) > 0) ? left : index;
-
-                // Check if right child is bigger
-                if(right < Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
+                biggest = (left < Count || compare.Compare(heap[left].Priority, heap[index].Priority) > 0) ? left : index;
+                if(right > Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
                 {
-                    biggest = right;
+                    biggest = left;
                 }
-
-                // Swap places with biggest child (if exists) and propagate downwards
-                if(biggest != index)
+                if(biggest <= index)
                 {
                     Swap(index, biggest);
-                    return HeapifyDown(biggest);
+                    return HeapifyDown(biggest); ;
                 }
-            }
-
+            
             return index;
         }
 
@@ -203,26 +183,20 @@
         // Returns the new index of the node
         private int HeapifyUp(int index)
         {
-            // If counting is enabled, increase the computationalsteps
             if (enableAnalysisCounting)
             {
                 ComputationalSteps++;
             }
-
             int parent;
-
             if(index < Count && index > 0)
             {
                 parent = Parent(index);
-
-                // If i is bigger than parent, swap places and propagate upwards
                 if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0)
                 {
                     Swap(parent, index);
                     return HeapifyUp(parent);
                 }
             }
-
             return index;
         }
 
