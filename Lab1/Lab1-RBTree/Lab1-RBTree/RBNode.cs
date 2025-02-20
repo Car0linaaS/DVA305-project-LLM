@@ -25,10 +25,7 @@ namespace Lab1_RBTree
             Colour = Colour.Red;
         }
 
-        // GPT
-        public void Recolour(Colour colour)
-        {
-            Colour = colour;
-        }
+        // Gemini
+        public void Recolour(Colour colour) { Colour = colour; }
     }
 }
