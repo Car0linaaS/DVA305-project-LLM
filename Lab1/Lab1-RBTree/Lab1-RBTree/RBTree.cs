@@ -62,7 +62,7 @@ namespace Lab1_RBTree
             else { yield break; }  // In case rootNode is Nil
         }
 
-        // Gemini
+        // GPT
         private void RightRotate(RBNode<TElement> oldSubRoot)
         {
             if (oldSubRoot == Nil || oldSubRoot.Left == Nil) { return; }
@@ -71,51 +71,75 @@ namespace Lab1_RBTree
 
             if (oldSubRoot.Parent != Nil)
             {
-                if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
-                else { oldSubRoot.Parent.Left = newSubRoot; }
+                if (oldSubRoot == oldSubRoot.Parent.Right)
+                {
+                    oldSubRoot.Parent.Right = newSubRoot;
+                }
+                else
+                {
+                    oldSubRoot.Parent.Left = newSubRoot;
+                }
             }
 
             newSubRoot.Parent = oldSubRoot.Parent;
             oldSubRoot.Parent = newSubRoot;
             oldSubRoot.Left = newSubRoot.Right;
 
-            if (newSubRoot.Right != Nil) { newSubRoot.Right.Parent = oldSubRoot; }
+            if (newSubRoot.Right != Nil)
+            {
+                newSubRoot.Right!.Parent = oldSubRoot;
+            }
             newSubRoot.Right = oldSubRoot;
 
-            if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
+            if (newSubRoot.Parent == Nil)
+            {
+                Root = newSubRoot;
+            }
         }
 
-        // Gemini
+        // GPT
         private void LeftRotate(RBNode<TElement> oldSubRoot)
         {
-            if (oldSubRoot == Nil || oldSubRoot.Right == Nil) { return; }
+            if (oldSubRoot == Nil || oldSubRoot!.Right == Nil) { return; }
 
             var newSubRoot = oldSubRoot.Right;
 
             if (oldSubRoot.Parent != Nil)
             {
-                if (oldSubRoot == oldSubRoot.Parent.Right) { oldSubRoot.Parent.Right = newSubRoot; }
-                else { oldSubRoot.Parent.Left = newSubRoot; }
+                if (oldSubRoot == oldSubRoot.Parent.Right)
+                {
+                    oldSubRoot.Parent.Right = newSubRoot;
+                }
+                else
+                {
+                    oldSubRoot.Parent.Left = newSubRoot;
+                }
             }
 
             newSubRoot.Parent = oldSubRoot.Parent;
             oldSubRoot.Parent = newSubRoot;
             oldSubRoot.Right = newSubRoot.Left;
 
-            if (newSubRoot.Left != Nil) { newSubRoot.Left.Parent = oldSubRoot; }
+            if (newSubRoot.Left != Nil)
+            {
+                newSubRoot.Left!.Parent = oldSubRoot;
+            }
             newSubRoot.Left = oldSubRoot;
 
-            if (newSubRoot.Parent == Nil) { Root = newSubRoot; }
+            if (newSubRoot.Parent == Nil)
+            {
+                Root = newSubRoot;
+            }
         }
-        // Gemini
+        // GPT
         private void InsertFixup(RBNode<TElement> newNode)
         {
-            while (newNode.Parent != Nil && newNode.Parent.Colour == Colour.Red)
+            while (newNode.Parent.Colour == Colour.Red)
             {
                 if (newNode.Parent == newNode.Parent.Parent.Left)
                 {
                     var uncle = newNode.Parent.Parent.Right;
-                    if (uncle != Nil && uncle.Colour == Colour.Red)
+                    if (uncle.Colour == Colour.Red)
                     {
                         newNode.Parent.Recolour(Colour.Black);
                         uncle.Recolour(Colour.Black);
@@ -137,7 +161,7 @@ namespace Lab1_RBTree
                 else if (newNode.Parent == newNode.Parent.Parent.Right)
                 {
                     var uncle = newNode.Parent.Parent.Left;
-                    if (uncle != Nil && uncle.Colour == Colour.Red)
+                    if (uncle.Colour == Colour.Red)
                     {
                         newNode.Parent.Recolour(Colour.Black);
                         uncle.Recolour(Colour.Black);
@@ -156,11 +180,15 @@ namespace Lab1_RBTree
                         LeftRotate(newNode.Parent.Parent);
                     }
                 }
-                if (newNode.Parent == Nil) { Root.Recolour(Colour.Red); return; } // Didn't find that this should be Colour.Black
+                if (newNode.Parent == Nil)
+                {
+                    Root.Recolour(Colour.Black);
+                    return;
+                }
             }
             Root.Recolour(Colour.Black);
         }
-        // Gemini
+        // GPT
         public void Insert(TElement element)
         {
             var newNode = new RBNode<TElement>(element, Nil);
@@ -171,22 +199,37 @@ namespace Lab1_RBTree
             {
                 newNodeParent = currentNode;
 
-                if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
-                else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
-                else { return; }
+                if (element.CompareTo(currentNode!.Data) < 0)
+                {
+                    currentNode = currentNode.Left;
+                }
+                else if (element.CompareTo(currentNode!.Data) > 0)
+                {
+                    currentNode = currentNode.Right;
+                }
+                else
+                {
+                    return;
+                }
             }
 
             Count++;
             newNode.Parent = newNodeParent;
 
-            if (newNodeParent == Nil)
+            if (newNodeParent == null) // Didn't find this, should be Nil
             {
                 Root = newNode;
                 Root.Recolour(Colour.Black);
                 return;
             }
-            else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0) { newNodeParent.Left = newNode; }
-            else if (newNode.Data.CompareTo(newNodeParent!.Data) > 0) { newNodeParent.Right = newNode; }
+            else if (newNode.Data.CompareTo(newNodeParent!.Data) < 0)
+            {
+                newNodeParent.Left = newNode;
+            }
+            else
+            {
+                newNodeParent.Right = newNode;
+            }
 
             InsertFixup(newNode);
         }
