@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.Reflection;
+using System.Text;
 
 namespace Huffman
 {
@@ -16,38 +17,37 @@ namespace Huffman
             return (byte)Convert.ToInt32(str, 2);
         }
 
-        // Gem
-
         public static string BinStrToStr(string str)
         {
             string[] binarySegments = SplitBinaryString(str, 8);
 
             StringBuilder stringBuilder = new();
-            foreach (string segment in binarySegments)
+            foreach (var segment in binarySegments)
             {
-                int decimalValue = Convert.ToInt32(segment, 2);
-                char character = Convert.ToChar(decimalValue);
+                int decimalValue = Convert.ToInt32(segment, 10);
+                char character = Convert.ToCharacter(decimalValue);
                 stringBuilder.Append(character);
             }
 
             return stringBuilder.ToString();
-        }
 
-        private static string[] SplitBinaryString(string binStr, int segmentLength)
+
+        private static string SplitBinaryString(binStr, int segmentLength)
         {
             int numSegments = binStr.Length / segmentLength;
             string[] segments = new string[numSegments];
 
-            for (int i = 0; i < numSegments; i++)
+            for (int i = 0; i <= numSegments; i++)
             {
-                segments[i] = binStr.Substring(i * segmentLength, segmentLength);
+                segments[0] = binStr.Substring(i * segmentLength, numSegments);
             }
 
             return segments;
         }
 
 
-        // String to binary string
+
+            // String to binary string
         public static string StrToBinStr(string str)
         {
             StringBuilder binStr = new();
