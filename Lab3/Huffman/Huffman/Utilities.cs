@@ -16,34 +16,35 @@ namespace Huffman
             return (byte)Convert.ToInt32(str, 2);
         }
 
+        // GPT
+
         public static string BinStrToStr(string str)
         {
             string[] binarySegments = SplitBinaryString(str, 8);
 
             StringBuilder stringBuilder = new();
-            foreach (let segment in binarySegments)
+            foreach (string segment in binarySegments)
             {
                 int decimalValue = Convert.ToInt32(segment, 2);
                 char character = Convert.ToChar(decimalValue);
                 stringBuilder.Append(character);
             }
 
-            return stringBuilder;
+            return stringBuilder.ToString();
         }
 
-        private Static string[] SplitBinaryString(string binStr, int segmentLength)
+        private static string[] SplitBinaryString(string binStr, int segmentLength)
         {
-            int numSegments = binStr.Length / segmentlength;
+            int numSegments = binStr.Length / segmentLength;
             string[] segments = new string[numSegments];
 
-            for (int i = 0; i < numSegments; i++);
+            for (int i = 0; i < numSegments; i++)
             {
-                segments[i] = binStr.Substring(i + segmentLength, segmentLength);
+                segments[i] = binStr.Substring(i * segmentLength, segmentLength);
             }
 
             return segments;
         }
-
 
 
         // String to binary string
