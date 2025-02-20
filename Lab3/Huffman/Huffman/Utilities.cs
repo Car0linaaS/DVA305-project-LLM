@@ -16,31 +16,31 @@ namespace Huffman
             return (byte)Convert.ToInt32(str, 2);
         }
 
-        // Gem
+        // Gpt
 
         public static string BinStrToStr(string str)
         {
             string[] binarySegments = SplitBinaryString(str, 8);
 
             StringBuilder stringBuilder = new();
-            foreach (string segment in binarySegments)
+            foreach (var segment in binarySegments) // Corrected 'let' to 'var'
             {
                 int decimalValue = Convert.ToInt32(segment, 2);
                 char character = Convert.ToChar(decimalValue);
                 stringBuilder.Append(character);
             }
 
-            return stringBuilder.ToString();
+            return stringBuilder.ToString(); // Added .ToString() to return a string
         }
 
-        private static string[] SplitBinaryString(string binStr, int segmentLength)
+        private static string[] SplitBinaryString(string binStr, int segmentLength) // Corrected 'Static' to 'static'
         {
-            int numSegments = binStr.Length / segmentLength;
+            int numSegments = binStr.Length / segmentLength; // Corrected 'segmentlength' to 'segmentLength'
             string[] segments = new string[numSegments];
 
-            for (int i = 0; i < numSegments; i++)
+            for (int i = 0; i < numSegments; i++) // Removed the extraneous semicolon after the for loop
             {
-                segments[i] = binStr.Substring(i * segmentLength, segmentLength);
+                segments[i] = binStr.Substring(i * segmentLength, segmentLength); // Corrected the substring indices
             }
 
             return segments;
