@@ -190,13 +190,14 @@ namespace Lab1_RBTree
             InsertFixup(newNode);
         }
 
-        public TElement? Maximum();
+        // GPT
+        public TElement? Maximum()
         {
             if (Root == Nil) { return default; }
             else
             {
                 var temp = Root;
-                while (temp.Right == Nil) { temp = temp.Right; }
+                while (temp.Right != Nil) { temp = temp.Right; }
                 return temp.Data;
             }
         }
