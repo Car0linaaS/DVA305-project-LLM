@@ -24,22 +24,22 @@ namespace Huffman
             StringBuilder stringBuilder = new();
             foreach (var segment in binarySegments)
             {
-                int decimalValue = Convert.ToInt32(segment, 2); // Corrected base to 2
-                char character = Convert.ToChar(decimalValue);  // Corrected method name
+                int decimalValue = Convert.ToInt32(segment, 2);
+                char character = Convert.ToChar(decimalValue);
                 stringBuilder.Append(character);
             }
 
             return stringBuilder.ToString();
         }
 
-        private static string[] SplitBinaryString(string binStr, int segmentLength) // Fixed parameter declaration
+        private static string[] SplitBinaryString(string binStr, int segmentLength)
         {
             int numSegments = binStr.Length / segmentLength;
             string[] segments = new string[numSegments];
 
-            for (int i = 0; i < numSegments; i++) // Changed <= to < for correct loop condition
+            for (int i = 0; i < numSegments; i++)
             {
-                segments[i] = binStr.Substring(i * segmentLength, segmentLength); // Corrected assignment and length
+                segments[i] = binStr.Substring(i * segmentLength, segmentLength);
             }
 
             return segments;
