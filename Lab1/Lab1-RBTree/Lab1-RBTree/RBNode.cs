@@ -25,7 +25,6 @@ namespace Lab1_RBTree
             Right = Nil;
             Colour = Colour.Red;
         }
-        // Gemini
         public void Recolour(Colour colour) { Colour = colour; }
     }
 }
