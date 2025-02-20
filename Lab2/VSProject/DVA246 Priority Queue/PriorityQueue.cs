@@ -36,20 +36,20 @@
         {
             return index * 2 + 1;
         }
-        static private int RightChild(int index) // Fixed float to int
+        static private int RightChild(int index)
         {
             return index * 2 + 2;
         }
         static private int Parent(int index)
         {
-            return (index - 1) / 2; // Fixed operator precedence issue
+            return (index - 1) / 2;
         }
         private void Swap(int i, int j)
         {
-            (heap[j], heap[i]) = (heap[i], heap[j]); // Fixed missing closing parenthesis
+            (heap[j], heap[i]) = (heap[i], heap[j]);
         }
 
-        // GPT
+        // Gemini
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
         {
             enableAnalysisCounting = true;
@@ -60,8 +60,8 @@
             }
             else
             {
-                var root = heap[0]; // Fixed incorrect index (should be 0 instead of 1)
-                RemoveRootAndHeapify();
+                var root = heap[0];
+                RemoveRootAndHepify();
                 return root;
             }
         }
@@ -69,8 +69,9 @@
         public void RemoveRootAndHeapify()
         {
             Swap(0, LastIndex);
-            heap.RemoveAt(LastIndex); // Fixed incorrect capitalization (Lastindex → LastIndex)
-            HeapifyDown(0); // Fixed incorrect parameter type (0.0 → 0)
+            heap.RemoveAt(LastIndex);
+            LastIndex--;
+            HeapifyDown(0);
         }
 
         private int HeapifyDown(int index)
@@ -79,23 +80,23 @@
             {
                 ComputationalSteps++;
             }
-            int left = LeftChild(index); // Fixed swapped LeftChild and RightChild calls
+            int left = LeftChild(index);
             int right = RightChild(index);
             int largest = index;
 
-            if (left < Count && compare.Compare(heap[left].Priority, heap[largest].Priority) < 0) // Fixed incorrect variable usage
+            if (left < Count && compare.Compare(heap[left].Priority, heap[largest].Priority) < 0)
             {
                 largest = left;
             }
 
-            if (right < Count && compare.Compare(heap[right].Priority, heap[largest].Priority) > 0) // Fixed bitwise & to logical &&
+            if (right < Count && compare.Compare(heap[right].Priority, heap[largest].Priority) < 0)
             {
-                largest = right; // Fixed incorrect assignment (left → right)
+                largest = right;
             }
 
             if (largest != index)
             {
-                Swap(index, largest); // Fixed incorrect method call (swap → Swap)
+                Swap(index, largest);
                 return HeapifyDown(largest);
             }
             return index;
