@@ -16,7 +16,7 @@ namespace Huffman
             return (byte)Convert.ToInt32(str, 2);
         }
 
-        // GPT
+        // Gem
 
         public static string BinStrToStr(string str)
         {
