@@ -235,8 +235,8 @@ namespace Lab1_RBTree
             else
             {
                 var temp = Root;
-                while (temp.Left == Nil) { temp = temp.Left; }
-                return temp.Data
+                while (temp.Left != Nil) { temp = temp.Left; }
+                return temp.Data;
             }
         }
         // Predecessor() returns the largest element that is strictly smaller than element, or null if there is no such element.
