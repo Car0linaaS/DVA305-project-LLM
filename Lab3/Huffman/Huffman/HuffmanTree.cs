@@ -21,10 +21,8 @@
             CodesDictionary = new Dictionary<byte, string>();
         }
 
-        // Constructs the tree from a byte array
         public void ConstructTreeFromArray(byte[] treeArray)
         {
-            // Identify how many times each symbol occurs
             Dictionary<byte, int> occurances = new();
 
             foreach (var b in treeArray)
@@ -39,7 +37,6 @@
                 }
             }
 
-            // Store all trees is a priority queue sorted by the occurance values
             PriorityQueue<HuffmanTree, int> priorityQueue = new();
 
             foreach (var data in occurances)
@@ -47,9 +44,6 @@
                 priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value);
             }
 
-            // Remove 2 "smallest" trees L & R from the queue, and create a new tree with L & R as children
-            // The value of the new tree is the combined value of L & R
-            // Insert sorted in queue, done when only one tree left
             while (priorityQueue.Count > 1)
             {
                 var left = priorityQueue.Dequeue();
@@ -60,12 +54,10 @@
                 priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
-            // The last tree left in the queue becomes our root
             Root = priorityQueue.Dequeue().Root;
             CreateCharacterDictionary(Root, "");
         }
 
-        // Recursively build dictionary with the Huffman codes 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
             if (root == null)
@@ -82,7 +74,6 @@
             CreateCharacterDictionary(root.Right, binStr + "1");
         }
 
-        // Encodes the tree and returns it as a string
         public string EncodeTree(TreeNode? root, string binStr)
         {
             if (root == null)
@@ -90,15 +81,12 @@
                 return binStr;
             }
 
-            // If the current root is not a leaf, add a zero to the string,
-            // then call recursively for the left & right subtrees.
             if (!root.IsLeaf)
             {
                 binStr += "0";
                 binStr = EncodeTree(root.Left, binStr);
                 binStr = EncodeTree(root.Right, binStr);
             }
-            // If the current root is a leaf, add a one to the string, followed by the byte that that leaf represents.
             else
             {
                 if(root.Data != null)

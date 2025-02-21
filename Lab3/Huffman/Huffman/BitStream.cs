@@ -29,12 +29,9 @@
         // Write one bit to buffer, output one byte to stream for each 8 bits
         public void WriteBit(bool bit)
         {
-            // Check the value of the bit, and left shift (<<) it as much as needed to get the right position
-            // Bitwise OR (|=) sets bits in the buffer to 1 if either the lefthand or righthand bit is 1
             buffer |= (byte)((bit ? 1 : 0) << (7 - bitsWritten));
             bitsWritten++;
 
-            // If the buffer is full, write it to the stream
             if (bitsWritten == 8)
             {
                 stream.WriteByte(buffer);

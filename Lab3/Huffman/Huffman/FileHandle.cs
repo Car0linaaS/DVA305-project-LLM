@@ -12,21 +12,19 @@ namespace Huffman
             HuffmanTree = new();
         }
 
-        // Compress file, return true if successful, false otherwise
+
         public bool CompressFile()
         {
             string encodedTree;
             List<bool> encodedFile;
             byte[] originalContent;
 
-            // Check that file exists
             if (!FileExists())
             {
                 Console.Write("File does not exist. ");
                 return false;
             }
 
-            // Read all bytes from file into array
             try
             {
                 originalContent = File.ReadAllBytes(FilePath);
@@ -39,7 +37,6 @@ namespace Huffman
 
             Console.WriteLine("File compression starting...");
 
-            // Construct huffman tree, encode the file extension, tree and file and write them to new file
             if (originalContent.Length > 0)
             {
                 HuffmanTree.ConstructTreeFromArray(originalContent);
@@ -55,8 +52,6 @@ namespace Huffman
             {
                 return false;
             }
-
-
         }
 
         // Decompress file, return true if successful otherwise false
@@ -108,24 +103,20 @@ namespace Huffman
 
             var extensionEncoded = Utilities.StrToBinStr(ext);
 
-            // Write extension length, encoded tree length, data length as 32-bit int, 
             writer.WriteInt32(extensionEncoded.Length);
             writer.WriteInt32(encodedTree.Length);
             writer.WriteInt32(compressedData.Count);
 
-            // Write encoded extension to the file
             foreach (var bit in extensionEncoded)
             {
                 writer.WriteBit(bit == '1');
             }
 
-            // Write encoded tree to the file, if bit is '1', true otherwise false
             foreach (var bit in encodedTree)
             {
                 writer.WriteBit(bit == '1');
             }
 
-            // Write compressed data to the file
             foreach (var boolean in compressedData)
             {
                 writer.WriteBit(boolean);
@@ -205,10 +196,8 @@ namespace Huffman
 
             foreach (var b in content)
             {
-                // Retrieve Huffman code for the current byte
                 string huffmanCode = HuffmanTree.CodesDictionary[b];
 
-                // Convert Huffman code to a sequence of bits
                 foreach (var bit in huffmanCode)
                 {
                     encodedBits.Add(bit == '1');
