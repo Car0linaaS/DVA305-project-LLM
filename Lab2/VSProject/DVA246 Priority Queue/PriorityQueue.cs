@@ -42,23 +42,24 @@
         // START OF TEST AREA
         static private int Parent(int index)
         {
-            return (int)((index - 1.0) / 2);
+            return (index - 1) / 2; // Changed from (index - 1.0) / 2 to integer division
         }
+
         private void Swap(int i, int j)
         {
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
-        // Gemini
+        // GPT
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
             enableAnalysisCounting = true;
             ComputationalSteps = 0;
-            var newNode = new QueueElement<TElement, TPriority>(element, priority);
-            heap.Add(newNode);
-            int nodeIndex = heap.Count - 1; // Corrected: Use Count - 1 for last index
-            nodeIndex = HeapifyUp(nodeIndex); // Corrected: Assign the returned index
-            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex); // Corrected: Use new keyword
+            var newNode = new QueueElement<TElement, TPriority>(element, priority); // Fixed "pririty" typo
+            heap.Add(newNode); // Fixed syntax error: "heap.Add.newNode);" → "heap.Add(newNode);"
+            int nodeIndex = HeapifyUp(heap.Count - 1); // Fixed "Heapifyup" typo & used correct last index
+            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex); // Fixed missing "new" keyword
         }
+
         private int HeapifyUp(int index)
         {
             if (enableAnalysisCounting)
@@ -66,13 +67,13 @@
                 ComputationalSteps++;
             }
             int parent;
-            if (index > 0) // Corrected: Only check if index is greater than 0
+            if (index > 0 && index < heap.Count) // Fixed logical check (index < Count → index < heap.Count)
             {
                 parent = Parent(index);
-                if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0) // Corrected: Access Priority property correctly
+                if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0) // Fixed double brackets "heap[[index]" → "heap[index]"
                 {
                     Swap(parent, index);
-                    return HeapifyUp(parent); // Corrected: Return the result of the recursive call
+                    return HeapifyUp(parent); // Fixed extra parentheses "return (HeapifyUp(parent);"
                 }
             }
             return index;
