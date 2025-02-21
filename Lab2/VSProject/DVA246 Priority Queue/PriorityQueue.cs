@@ -42,24 +42,22 @@
         // START OF TEST AREA
         static private int Parent(int index)
         {
-            return (index - 1) / 2; // Changed from (index - 1.0) / 2 to integer division
+            return (int)((index - 1.0) / 2);
         }
-
         private void Swap(int i, int j)
         {
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
-        // GPT
+        // Gemini
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
             enableAnalysisCounting = true;
             ComputationalSteps = 0;
-            var newNode = new QueueElement<TElement, TPriority>(element, priority); // Fixed "pririty" typo
-            heap.Add(newNode); // Fixed syntax error: "heap.Add.newNode);" → "heap.Add(newNode);"
-            int nodeIndex = HeapifyUp(heap.Count - 1); // Fixed "Heapifyup" typo & used correct last index
-            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex); // Fixed missing "new" keyword
+            var newNode = new QueueElement<TElement, TPriority>(element, priority);
+            heap.Add(newNode);
+            int nodeIndex = HeapifyUp(heap.Count - 1);
+            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex);
         }
-
         private int HeapifyUp(int index)
         {
             if (enableAnalysisCounting)
@@ -67,18 +65,17 @@
                 ComputationalSteps++;
             }
             int parent;
-            if (index > 0 && index < heap.Count) // Fixed logical check (index < Count → index < heap.Count)
+            if (index > 0)
             {
                 parent = Parent(index);
-                if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0) // Fixed double brackets "heap[[index]" → "heap[index]"
+                if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0)
                 {
                     Swap(parent, index);
-                    return HeapifyUp(parent); // Fixed extra parentheses "return (HeapifyUp(parent);"
+                    return HeapifyUp(parent);
                 }
             }
             return index;
         }
-
         // END OF TEST AREA
 
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
