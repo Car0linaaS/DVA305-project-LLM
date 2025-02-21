@@ -231,16 +231,25 @@ namespace Lab1_RBTree
             return predecessor;
         }
 
-        // GPT
+        // Gemini
         public bool Search(TElement element)
         {
             var currentNode = Root;
 
             while (currentNode != Nil)
             {
-                if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
-                else if (element.CompareTo(currentNode.Data) > 0) { currentNode = currentNode.Right; }
-                else { return true; } // Return true if the element is found
+                if (element.CompareTo(currentNode!.Data) < 0)
+                {
+                    currentNode = currentNode.Left;
+                }
+                else if (element.CompareTo(currentNode!.Data) > 0)
+                {
+                    currentNode = currentNode.Right;
+                }
+                else
+                {
+                    return true;
+                }
             }
 
             return false;
