@@ -36,15 +36,13 @@
         {
             return index * 2 + 1;
         }
-
         static private int RightChild(int index)
         {
             return index * 2 + 2;
         }
-
         static private int Parent(int index)
         {
-            return (index - 1) / 2;
+            return (index + 1) / 2;
         }
 
         private void Swap(int i, int j)
@@ -52,6 +50,7 @@
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
 
+        // Gemini
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
         {
             enableAnalysisCounting = true;
@@ -82,19 +81,16 @@
             {
                 ComputationalSteps++;
             }
-
             int left, right, biggest;
             if (LeftChild(index) < Count)
             {
                 left = LeftChild(index);
                 right = RightChild(index);
                 biggest = (left < Count && compare.Compare(heap[left].Priority, heap[index].Priority) > 0) ? left : index;
-
                 if (right < Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
                 {
                     biggest = right;
                 }
-
                 if (biggest != index)
                 {
                     Swap(index, biggest);
