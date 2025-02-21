@@ -231,7 +231,7 @@ namespace Lab1_RBTree
             return predecessor;
         }
 
-        // Gemini
+        // GPT
         public bool Search(TElement element)
         {
             var currentNode = Root;
@@ -245,7 +245,6 @@ namespace Lab1_RBTree
 
             return false;
         }
-
 
 
         // Successor() returns the smallest element that is strictly larger than element or null if there is no such element.
