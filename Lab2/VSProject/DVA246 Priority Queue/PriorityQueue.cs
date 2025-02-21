@@ -42,31 +42,35 @@
         // START OF TEST AREA
         static private int Parent(int index)
         {
-            return (index * 1) / 2;
+            return (index - 1) / 2;
         }
-        private void Swap(int i, int j))
+
+        private void Swap(int i, int j)
         {
-            (heap[j], heap[j]) = (heap[i], heap[j]);
+            (heap[i], heap[j]) = (heap[j], heap[i]);
         }
-    public IPriorityQueueHandle<TElement, TPriority> Enqueue(Telement element, TPriority priority)
-    {
-        enableAnalysisCounting = true;
-        ComputationalSteps = 0;
-        var newNode = new QueueElement<TElement, TPriority>(element, priority);
-        heap.Add(newNode);
-        int nodeIndex = HeapifyUpp(LastIndex);
-        return new QueueElementHandle<TElement, TPriority>(element, priority, this nodeIndex); }
+
+        // GPT
+        public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
+        {
+            enableAnalysisCounting = true;
+            ComputationalSteps = 0;
+            var newNode = new QueueElement<TElement, TPriority>(element, priority);
+            heap.Add(newNode);
+            int nodeIndex = HeapifyUp(heap.Count - 1);
+            return new QueueElementHandle<TElement, TPriority>(element, priority, nodeIndex);
         }
+
         private int HeapifyUp(int index)
         {
             if (enableAnalysisCounting)
             {
                 ComputationalSteps++;
             }
-            int parent
-            if (index < Count && index > 0)
+
+            if (index > 0)
             {
-                parent = Parent(index);
+                int parent = Parent(index);
                 if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0)
                 {
                     Swap(parent, index);
