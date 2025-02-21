@@ -231,20 +231,21 @@ namespace Lab1_RBTree
             return predecessor;
         }
 
-
+        // GPT
         public bool Search(TElement element)
         {
             var currentNode = Root;
 
             while (currentNode != Nil)
             {
-                if element.CompareTo(currentNode!.Data) < 0 { currentNode = currentNode.Left; }
-                else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
-                else { return false; }
+                if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
+                else if (element.CompareTo(currentNode.Data) > 0) { currentNode = currentNode.Right; }
+                else { return true; }
             }
 
             return false;
         }
+
 
 
 
