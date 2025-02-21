@@ -36,12 +36,10 @@
         {
             return index * 2 + 1;
         }
-
         static private int RightChild(int index)
         {
             return index * 2 + 2;
         }
-
         static private int Parent(int index)
         {
             return (index - 1) / 2;
@@ -52,7 +50,7 @@
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
 
-        // GPT
+        // Gemini
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
         {
             enableAnalysisCounting = true;
@@ -74,6 +72,7 @@
         {
             Swap(0, LastIndex);
             heap.RemoveAt(LastIndex);
+            LastIndex--; // Decrement LastIndex after removing the element
             HeapifyDown(0);
         }
 
@@ -83,15 +82,18 @@
             {
                 ComputationalSteps++;
             }
-
             int left, right, biggest;
-            if (LeftChild(index) < Count)
+            while (true) // Use a loop for iterative heapify down
             {
                 left = LeftChild(index);
                 right = RightChild(index);
-                biggest = (left < Count && compare.Compare(heap[left].Priority, heap[index].Priority) > 0) ? left : index;
+                biggest = index; // Initialize biggest to the current index
 
-                if (right < Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
+                if (left <= LastIndex && compare.Compare(heap[left].Priority, heap[biggest].Priority) > 0)
+                {
+                    biggest = left;
+                }
+                if (right <= LastIndex && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
                 {
                     biggest = right;
                 }
@@ -99,7 +101,11 @@
                 if (biggest != index)
                 {
                     Swap(index, biggest);
-                    return HeapifyDown(biggest);
+                    index = biggest; // Update index for the next iteration
+                }
+                else
+                {
+                    break; // Exit the loop if no swap occurred
                 }
             }
             return index;
