@@ -9,7 +9,7 @@ namespace Lab4_LCS
     public class LCS
     {
         // START OF TEST AREA
-        // GPT
+        // Gemini
         public int GetLcsLength(string string1, string string2)
         {
             string shorterString = string2;
