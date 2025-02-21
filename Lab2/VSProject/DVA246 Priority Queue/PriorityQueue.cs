@@ -48,7 +48,7 @@
         {
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
-        // Gemini
+        // GPT
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
             enableAnalysisCounting = true;
@@ -64,11 +64,10 @@
             {
                 ComputationalSteps++;
             }
-            int parent;
             if (index > 0)
             {
-                parent = Parent(index);
-                if (compare(heap[index].Priority, heap[parent].Priority) > 0)
+                int parent = Parent(index);
+                if (compare(heap[index].Priority, heap[parent].Priority) >= 0)
                 {
                     Swap(parent, index);
                     return HeapifyUp(parent);
