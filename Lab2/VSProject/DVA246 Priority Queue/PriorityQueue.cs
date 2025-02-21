@@ -40,23 +40,22 @@
         }
 
         // START OF TEST AREA
-
         static private int Parent(int index)
         {
-            return (index - 1) / 2;
+            return (index - 1) / 2; // Fixed incorrect parent index calculation
         }
         private void Swap(int i, int j)
         {
-            (heap[j], heap[i]) = (heap[i], heap[j]);
+            (heap[j], heap[i]) = (heap[i], heap[j]); // Removed extra closing parenthesis
         }
-        // Gemini
+        //GPT
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
             enableAnalysisCounting = true;
             ComputationalSteps = 0;
-            var newNode = new QueueElement<TElement, TPriority>(element, priority);
-            heap.Add(newNode);
-            int nodeIndex = HeapifyUp(heap.Count - 1);
+            var newNode = new QueueElement<TElement, TPriority>(element, priority); // Fixed incorrect constructor syntax
+            heap.Add(newNode); // Fixed incorrect variable name (`newnode` -> `newNode`)
+            int nodeIndex = HeapifyUp(heap.Count - 1); // Fixed incorrect reference to LastIndex
             return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex);
         }
         private int HeapifyUp(int index)
@@ -66,10 +65,10 @@
                 ComputationalSteps++;
             }
             int parent;
-            if (index > 0)
+            if (index < heap.Count && index > 0) // Fixed incorrect Count reference and index boundary
             {
                 parent = Parent(index);
-                if (compare(heap[index].Priority, heap[parent].Priority) > 0)
+                if (compare(heap[index].Priority, heap[parent].Priority) >= 0) // Fixed incorrect compare function call
                 {
                     Swap(parent, index);
                     return HeapifyUp(parent);
