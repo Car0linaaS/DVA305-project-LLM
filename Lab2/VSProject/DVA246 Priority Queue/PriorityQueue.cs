@@ -36,15 +36,13 @@
         {
             return index * 2 + 1;
         }
-
         static private int RightChild(int index)
         {
             return index * 2 + 2;
         }
-
         static private int Parent(int index)
         {
-            return (index - 1) / 2;
+            return (index + 1) / 2;
         }
 
         private void Swap(int i, int j)
@@ -52,7 +50,7 @@
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
 
-        // GPT
+        // Gemini
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
         {
             enableAnalysisCounting = true;
@@ -74,6 +72,7 @@
         {
             Swap(0, LastIndex);
             heap.RemoveAt(LastIndex);
+            LastIndex--; // Decrement LastIndex after removing the element
             HeapifyDown(0);
         }
 
@@ -83,24 +82,24 @@
             {
                 ComputationalSteps++;
             }
+            int left = LeftChild(index);
+            int right = RightChild(index);
+            int biggest = index;
 
-            int left, right, biggest;
-            if (LeftChild(index) < Count) // Fixed condition
+            if (left <= LastIndex && compare.Compare(heap[left].Priority, heap[biggest].Priority) > 0)
             {
-                left = LeftChild(index);
-                right = RightChild(index);
-                biggest = (left < Count && compare.Compare(heap[left].Priority, heap[index].Priority) > 0) ? left : index;
+                biggest = left;
+            }
 
-                if (right < Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0) // Fixed condition
-                {
-                    biggest = right;
-                }
+            if (right <= LastIndex && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
+            {
+                biggest = right;
+            }
 
-                if (biggest != index) // Fixed missing parenthesis
-                {
-                    Swap(index, biggest);
-                    return HeapifyDown(biggest);
-                }
+            if (biggest != index)
+            {
+                Swap(index, biggest);
+                return HeapifyDown(biggest);
             }
             return index;
         }
