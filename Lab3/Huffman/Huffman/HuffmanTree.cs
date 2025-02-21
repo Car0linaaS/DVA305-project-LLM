@@ -23,33 +23,33 @@
 
         public void ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurrences = new();  // Fixed syntax error
+            Dictionary<byte, int> occurances = new(); // Added missing ,int
 
             foreach (var b in treeArray)
             {
-                if (occurrences.ContainsKey(b))
+                if (occurances.ContainsKey(b))
                 {
-                    occurrences[b]++;
+                    occurances[b]++;
                 }
                 else
                 {
-                    occurrences.Add(b, 1);  // Change to 1 instead of 0 for correct counting
+                    occurances.Add(b, 1); // Corrected to 1, not 0
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new();  // Fixed variable name case
+            PriorityQueue<HuffmanTree, int> priorityQueue = new(); // Corrected typo
 
-            foreach (var data in occurrences)
+            foreach (var data in occurances)
             {
-                priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value);
+                priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value); // Corrected typo
             }
 
-            while (priorityQueue.Count > 1)  // Fixed condition to continue until only one node is left
+            while (priorityQueue.Count > 1) // Corrected condition
             {
                 var left = priorityQueue.Dequeue();
                 var right = priorityQueue.Dequeue();
 
-                var value = left.Root.Occurrence + right.Root.Occurrence;  // Fixed property name typo
+                var value = left.Root.Occurence + right.Root.Occurence;
 
                 priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
@@ -60,23 +60,23 @@
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
-            if (root == null)  // Fixed null comparison
+            if (root == null) // Corrected assignment to comparison
             {
                 return;
             }
 
             if (root.Data != null)
             {
-                CodesDictionary.Add((byte)root.Data, binStr);  // Fixed cast to byte and key-value pair syntax
+                CodesDictionary.Add((byte)root.Data, binStr); // Corrected cast
             }
 
             CreateCharacterDictionary(root.Left, binStr + "0");
-            CreateCharacterDictionary(root.Right, binStr + "1");  // Fixed the right branch binary string concatenation
+            CreateCharacterDictionary(root.Right, binStr + "1"); // Corrected to "1"
         }
 
         public string EncodeTree(TreeNode? root, string binStr)
         {
-            if (root == null)  // Fixed null comparison
+            if (root == null)
             {
                 return binStr;
             }
@@ -84,15 +84,15 @@
             if (root.IsLeaf)
             {
                 binStr += "0";
+                return binStr; // Return after processing leaf
             }
             else
             {
-                binStr += "1";  // Corrected position of '1' for internal nodes
+                binStr += "1" + Utilities.ByteToBin((byte)root.Data); // Corrected concatenation and added cast
                 binStr = EncodeTree(root.Left, binStr);
                 binStr = EncodeTree(root.Right, binStr);
+                return binStr;
             }
-
-            return binStr;
         }
 
         // Decode string and construct the tree
