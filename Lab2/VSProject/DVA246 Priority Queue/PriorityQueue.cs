@@ -44,13 +44,11 @@
         {
             return (index - 1) / 2;
         }
-
         private void Swap(int i, int j)
         {
             (heap[i], heap[j]) = (heap[j], heap[i]);
         }
-
-        // GPT
+        // Gemini
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
             enableAnalysisCounting = true;
@@ -60,17 +58,16 @@
             int nodeIndex = HeapifyUp(heap.Count - 1);
             return new QueueElementHandle<TElement, TPriority>(element, priority, nodeIndex);
         }
-
         private int HeapifyUp(int index)
         {
             if (enableAnalysisCounting)
             {
                 ComputationalSteps++;
             }
-
+            int parent;
             if (index > 0)
             {
-                int parent = Parent(index);
+                parent = Parent(index);
                 if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0)
                 {
                     Swap(parent, index);
