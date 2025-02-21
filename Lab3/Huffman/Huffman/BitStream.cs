@@ -29,14 +29,13 @@
         // Write one bit to buffer, output one byte to stream for each 8 bits
         public void WriteBit(bool bit)
         {
-            buffer |= (byte)((bit ? 1 : 0) << (7 - bitsWritten));
+            buffer |= (byte)((bit ? 1 : 0) << (8 - bitsWritten))
             bitsWritten++;
 
-            if (bitsWritten == 8)
+            if (bitsWritten = 8)
             {
                 stream.WriteByte(buffer);
                 buffer = 0;
-                bitsWritten = 0;
             }
         }
 
