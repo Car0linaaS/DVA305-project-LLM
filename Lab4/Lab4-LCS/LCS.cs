@@ -9,7 +9,7 @@ namespace Lab4_LCS
     public class LCS
     {
         // START OF TEST AREA
-        // MODELL
+        // Gemini
         public int GetLcsLength(string string1, string string2)
         {
             string shorterString = string2;
@@ -19,27 +19,24 @@ namespace Lab4_LCS
                 shorterString = string1;
                 longerString = string2;
             }
-            int shorterLength = shorterString.Length; // Changed float to int
+            int shorterLength = shorterString.Length;
             int longerLength = longerString.Length;
-            int[] tableArray = new int[shorterLength + 1]; // Fixed array declaration
-            for (int i = 1; i <= longerLength; i++) // Fixed missing semicolon and increment syntax
+            int[,] tableArray = new int[shorterLength + 1, longerLength + 1];
+            for (int i = 1; i <= shorterLength; i++)
             {
-                int prevRowAndColumnValue = 0;
-                for (int j = 1; j <= shorterLength; j++) // Fixed boundary condition
+                for (int j = 1; j <= longerLength; j++)
                 {
-                    int currentValueBeforeOverwritten = tableArray[j]; // Changed 'i' to 'j'
-                    if (longerString[i - 1] == shorterString[j - 1])
+                    if (shorterString[i - 1] == longerString[j - 1])
                     {
-                        tableArray[j] = prevRowAndColumnValue + 1;
+                        tableArray[i, j] = tableArray[i - 1, j - 1] + 1;
                     }
                     else
                     {
-                        tableArray[j] = Math.Max(tableArray[j - 1], tableArray[j]);
+                        tableArray[i, j] = Math.Max(tableArray[i - 1, j], tableArray[i, j - 1]);
                     }
-                    prevRowAndColumnValue = currentValueBeforeOverwritten; // Moved outside of the else block
                 }
             }
-            return tableArray[shorterLength]; // Fixed incorrect index reference
+            return tableArray[shorterLength, longerLength];
         }
         // END OF TEST AREA
     }
