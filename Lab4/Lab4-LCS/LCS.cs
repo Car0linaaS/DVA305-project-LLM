@@ -9,7 +9,7 @@ namespace Lab4_LCS
     public class LCS
     {
         // START OF TEST AREA
-        // Gemini
+        // GPT
         public int GetLcsLength(string string1, string string2)
         {
             string shorterString = string2;
@@ -22,6 +22,7 @@ namespace Lab4_LCS
             int shorterLength = shorterString.Length;
             int longerLength = longerString.Length;
             int[] tableArray = new int[shorterLength + 1];
+
             for (int i = 1; i <= longerLength; i++)
             {
                 int prevRowAndColumnValue = 0;
