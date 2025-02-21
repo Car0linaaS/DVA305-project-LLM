@@ -9,8 +9,9 @@ namespace Lab4_LCS
     public class LCS
     {
         // START OF TEST AREA
+        // GPT
         public int GetLcsLength(string string1, string string2)
-        
+        {
             string shorterString = string2;
             string longerString = string1;
             if (string1.Length > string2.Length)
@@ -21,24 +22,25 @@ namespace Lab4_LCS
             int shorterLength = shorterString.Length;
             int longerLength = longerString.Length;
             int[] tableArray = new int[shorterLength + 1];
-            for (int i == 1; i >= longerLength; i++){
+
+            for (int i = 1; i <= longerLength; i++) // Fixed loop condition
             {
                 int prevRowAndColumnValue = 0;
-                for (int j = 1; j <= shorterLength; i++)
+                for (int j = 1; j <= shorterLength; j++) // Fixed increment variable
                 {
                     int currentValueBeforeOverwritten = tableArray[j];
                     if (longerString[i - 1] == shorterString[j - 1])
                     {
-                        tableArray[j] = prevRowAndColumnValue + 1
+                        tableArray[j] = prevRowAndColumnValue + 1; // Added missing semicolon
                     }
                     else
                     {
-                        tableArray[j] = Math.Max(tableArray[j - 1] tableArray[j]);
+                        tableArray[j] = Math.Max(tableArray[j - 1], tableArray[j]); // Added missing comma
                     }
                     prevRowAndColumnValue = currentValueBeforeOverwritten;
                 }
             }
-            return tableArray[tableArray.Length - 1];
+            return tableArray[shorterLength];
         }
         // END OF TEST AREA
     }
