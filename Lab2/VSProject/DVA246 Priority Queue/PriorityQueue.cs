@@ -42,21 +42,24 @@
         // START OF TEST AREA
         static private int Parent(int index)
         {
-            return (index - 1.0) / 2;
+            return (index - 1) / 2; // Fixed division issue (removed .0 to ensure integer division)
         }
+
         private void Swap(int i, int j)
         {
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
+        // GPT
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
             enableAnalysisCounting = true;
             ComputationalSteps = 0;
-            var newNode = new QueueElement<TElement, TPriority>(element, pririty);
-            heap.Add.newNode);
-            int nodeIndex = Heapifyup(LastIndex);
-            return QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex);
+            var newNode = new QueueElement<TElement, TPriority>(element, priority); // Fixed typo: 'pririty' to 'priority'
+            heap.Add(newNode); // Fixed syntax error: 'heap.Add.newNode)' to 'heap.Add(newNode);'
+            int nodeIndex = HeapifyUp(LastIndex); // Fixed method name casing: 'Heapifyup' to 'HeapifyUp'
+            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex); // Fixed instantiation syntax
         }
+
         private int HeapifyUp(int index)
         {
             if (enableAnalysisCounting)
@@ -64,13 +67,13 @@
                 ComputationalSteps++;
             }
             int parent;
-            if (index < Count || index > 0)
+            if (index > 0 && index < Count) // Fixed incorrect logical condition
             {
                 parent = Parent(index);
-                if (compare.Compare(heap[[index].Priority, heap[parent].Priority) > 0)
+                if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0) // Fixed misplaced brackets 'heap[[index]' to 'heap[index]'
                 {
                     Swap(parent, index);
-                    return (HeapifyUp(parent);
+                    return HeapifyUp(parent); // Fixed incorrect parentheses usage
                 }
             }
             return index;
