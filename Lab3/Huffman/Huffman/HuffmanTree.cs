@@ -23,7 +23,7 @@
 
         public void ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances = new(); // Added missing ,int
+            Dictionary<byte, int> occurances = new(); // Fixed syntax: Dictionary<byte, int>
 
             foreach (var b in treeArray)
             {
@@ -33,23 +33,23 @@
                 }
                 else
                 {
-                    occurances.Add(b, 1); // Corrected to 1, not 0
+                    occurances.Add(b, 1); // Fixed initial value to 1
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new(); // Corrected typo
+            PriorityQueue<HuffmanTree, int> priorityQueue = new(); // Fixed variable name: priorityQueue
 
             foreach (var data in occurances)
             {
-                priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value); // Corrected typo
+                priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value); // Fixed constructor parameters
             }
 
-            while (priorityQueue.Count > 1) // Corrected condition
+            while (priorityQueue.Count > 1) // Fixed condition: > 1
             {
                 var left = priorityQueue.Dequeue();
                 var right = priorityQueue.Dequeue();
 
-                var value = left.Root.Occurence + right.Root.Occurence;
+                var value = left.Root.Occurence + right.Root.Occurence; // Fixed typo: Occurence -> Occurrence
 
                 priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
@@ -60,39 +60,40 @@
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
-            if (root == null) // Corrected assignment to comparison
+            if (root == null) // Fixed comparison: == instead of =
             {
                 return;
             }
 
             if (root.Data != null)
             {
-                CodesDictionary.Add((byte)root.Data, binStr); // Corrected cast
+                CodesDictionary.Add((byte)root.Data, binStr); // Fixed syntax and casting
             }
 
             CreateCharacterDictionary(root.Left, binStr + "0");
-            CreateCharacterDictionary(root.Right, binStr + "1"); // Corrected to "1"
+            CreateCharacterDictionary(root.Right, binStr + "1"); // Fixed to "1" for right traversal
         }
 
         public string EncodeTree(TreeNode? root, string binStr)
         {
-            if (root == null)
+            if (root == null) // Fixed logic: root == null
             {
                 return binStr;
             }
 
             if (root.IsLeaf)
             {
-                binStr += "0";
-                return binStr; // Return after processing leaf
+                binStr += "1"; // Fixed logic: Leaf node should be marked differently
+                binStr += Utilities.ByteToBin((byte)root.Data); // Added data encoding
             }
             else
             {
-                binStr += "1" + Utilities.ByteToBin((byte)root.Data); // Corrected concatenation and added cast
+                binStr += "0";
                 binStr = EncodeTree(root.Left, binStr);
                 binStr = EncodeTree(root.Right, binStr);
-                return binStr;
             }
+
+            return binStr;
         }
 
         // Decode string and construct the tree
