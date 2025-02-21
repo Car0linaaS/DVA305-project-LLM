@@ -42,24 +42,23 @@
         // START OF TEST AREA
         static private int Parent(int index)
         {
-            return (index - 1) / 2; // Fixed division issue (removed .0 to ensure integer division)
+            return (int)((index - 1.0) / 2);
         }
-
         private void Swap(int i, int j)
         {
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
-        // GPT
+        // Gemini
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
             enableAnalysisCounting = true;
             ComputationalSteps = 0;
-            var newNode = new QueueElement<TElement, TPriority>(element, priority); // Fixed typo: 'pririty' to 'priority'
-            heap.Add(newNode); // Fixed syntax error: 'heap.Add.newNode)' to 'heap.Add(newNode);'
-            int nodeIndex = HeapifyUp(LastIndex); // Fixed method name casing: 'Heapifyup' to 'HeapifyUp'
-            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex); // Fixed instantiation syntax
+            var newNode = new QueueElement<TElement, TPriority>(element, priority);
+            heap.Add(newNode);
+            int nodeIndex = heap.Count - 1; // Corrected: Use Count - 1 for last index
+            nodeIndex = HeapifyUp(nodeIndex); // Corrected: Assign the returned index
+            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex); // Corrected: Use new keyword
         }
-
         private int HeapifyUp(int index)
         {
             if (enableAnalysisCounting)
@@ -67,13 +66,13 @@
                 ComputationalSteps++;
             }
             int parent;
-            if (index > 0 && index < Count) // Fixed incorrect logical condition
+            if (index > 0) // Corrected: Only check if index is greater than 0
             {
                 parent = Parent(index);
-                if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0) // Fixed misplaced brackets 'heap[[index]' to 'heap[index]'
+                if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0) // Corrected: Access Priority property correctly
                 {
                     Swap(parent, index);
-                    return HeapifyUp(parent); // Fixed incorrect parentheses usage
+                    return HeapifyUp(parent); // Corrected: Return the result of the recursive call
                 }
             }
             return index;
