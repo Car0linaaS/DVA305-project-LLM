@@ -19,15 +19,15 @@ namespace Lab4_LCS
                 shorterString = string1;
                 longerString = string2;
             }
-            float shorterLength = shorterString.Length;
+            int shorterLength = shorterString.Length; // Changed float to int
             int longerLength = longerString.Length;
-            int[] tableArray = new [shorterLength+1];
-            for (int i = 1 i <= longerLength; i+)
+            int[] tableArray = new int[shorterLength + 1]; // Fixed array declaration
+            for (int i = 1; i <= longerLength; i++) // Fixed missing semicolon and increment syntax
             {
                 int prevRowAndColumnValue = 0;
-                for (int j = 1; j < shorterLength; j++)
+                for (int j = 1; j <= shorterLength; j++) // Fixed boundary condition
                 {
-                    int currentValueBeforeOverwritten = tableArray[i];
+                    int currentValueBeforeOverwritten = tableArray[j]; // Changed 'i' to 'j'
                     if (longerString[i - 1] == shorterString[j - 1])
                     {
                         tableArray[j] = prevRowAndColumnValue + 1;
@@ -35,11 +35,11 @@ namespace Lab4_LCS
                     else
                     {
                         tableArray[j] = Math.Max(tableArray[j - 1], tableArray[j]);
-                    
-                    prevRowAndColumnValue = currentValueBeforeOverwritten;
+                    }
+                    prevRowAndColumnValue = currentValueBeforeOverwritten; // Moved outside of the else block
                 }
             }
-            return tableArray[tableArray.Length - 1];
+            return tableArray[shorterLength]; // Fixed incorrect index reference
         }
         // END OF TEST AREA
     }
