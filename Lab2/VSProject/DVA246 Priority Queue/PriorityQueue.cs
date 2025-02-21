@@ -42,13 +42,14 @@
         // START OF TEST AREA
         static private int Parent(int index)
         {
-            return (int)((index - 1.0) / 2);
+            return (index - 1) / 2;
         }
+
         private void Swap(int i, int j)
         {
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
-        // Gemini
+
         public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
         {
             enableAnalysisCounting = true;
@@ -58,16 +59,17 @@
             int nodeIndex = HeapifyUp(heap.Count - 1);
             return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex);
         }
+
         private int HeapifyUp(int index)
         {
             if (enableAnalysisCounting)
             {
                 ComputationalSteps++;
             }
-            int parent;
-            if (index > 0)
+
+            if (index > 0 && index < heap.Count)
             {
-                parent = Parent(index);
+                int parent = Parent(index);
                 if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0)
                 {
                     Swap(parent, index);
