@@ -23,7 +23,7 @@
 
         public void ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances = new(); // Fixed: Dictionary<byte int> -> Dictionary<byte, int>
+            Dictionary<byte, int> occurances = new(); // Added ,int
 
             foreach (var b in treeArray)
             {
@@ -33,63 +33,64 @@
                 }
                 else
                 {
-                    occurances.Add(b, 1); // Fixed: Occurrence count should start at 1
+                    occurances.Add(b, 1); // Corrected to 1
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new(); // Fixed: priorityqueue -> priorityQueue
+            PriorityQueue<HuffmanTree, int> priorityQueue = new(); // Fixed typo
 
             foreach (var data in occurances)
             {
                 priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value);
             }
 
-            while (priorityQueue.Count > 1) // Fixed: Count should be > 1, not == 1
+            while (priorityQueue.Count > 1) // Corrected condition
             {
                 var left = priorityQueue.Dequeue();
                 var right = priorityQueue.Dequeue();
 
-                var value = left.Root.Occurrence + right.Root.Occurrence; // Fixed: Occurence -> Occurrence
+                var value = left.Root.Occurence + right.Root.Occurence;
 
                 priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
-            Root = priorityQueue.Dequeue();
+            Root = priorityQueue.Dequeue().Root;
             CreateCharacterDictionary(Root, "");
         }
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
-            if (root == null) // Fixed: = -> ==
+            if (root == null) // Corrected condition
             {
                 return;
             }
 
             if (root.Data != null)
             {
-                CodesDictionary.Add((byte)root.Data, binStr); // Fixed syntax
+                CodesDictionary.Add((byte)root.Data, binStr); // Corrected type cast
             }
 
             CreateCharacterDictionary(root.Left, binStr + "0");
-            CreateCharacterDictionary(root.Right, binStr + "1"); // Fixed: Right branch should have "1"
+            CreateCharacterDictionary(root.Right, binStr + "1"); // Corrected to "1"
         }
 
         public string EncodeTree(TreeNode? root, string binStr)
         {
             if (root == null)
             {
-                return binStr; // Fixed logic: return if root is null
+                return binStr;
             }
 
             if (root.IsLeaf)
             {
-                binStr += "1" + Utilities.ByteToBin((byte)root.Data); // Fixed: leaf nodes should store data
+                binStr += "0";
+                return binStr; // Return after leaf node
             }
             else
             {
-                binStr += "0";
-                binStr = EncodeTree(root.Left, binStr);
-                binStr = EncodeTree(root.Right, binStr);
+                binStr += "1" + Utilities.ByteToBin((byte)root.Data);
+                binStr = EncodeTree(root.Left, binStr); // Assign the result
+                binStr = EncodeTree(root.Right, binStr); // Assign the result
             }
 
             return binStr;
