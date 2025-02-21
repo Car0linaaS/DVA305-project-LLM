@@ -36,10 +36,12 @@
         {
             return index * 2 + 1;
         }
+
         static private int RightChild(int index)
         {
             return index * 2 + 2;
         }
+
         static private int Parent(int index)
         {
             return (index - 1) / 2;
@@ -50,7 +52,7 @@
             (heap[j], heap[i]) = (heap[i], heap[j]);
         }
 
-        // Gemini
+        // GPT
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
         {
             enableAnalysisCounting = true;
@@ -72,7 +74,6 @@
         {
             Swap(0, LastIndex);
             heap.RemoveAt(LastIndex);
-            LastIndex--; // Decrement LastIndex after removing the element
             HeapifyDown(0);
         }
 
@@ -82,30 +83,23 @@
             {
                 ComputationalSteps++;
             }
+
             int left, right, biggest;
-            while (true) // Use a loop for iterative heapify down
+            if (LeftChild(index) < Count) // Fixed condition
             {
                 left = LeftChild(index);
                 right = RightChild(index);
-                biggest = index; // Initialize biggest to the current index
+                biggest = (left < Count && compare.Compare(heap[left].Priority, heap[index].Priority) > 0) ? left : index;
 
-                if (left <= LastIndex && compare.Compare(heap[left].Priority, heap[biggest].Priority) > 0)
-                {
-                    biggest = left;
-                }
-                if (right <= LastIndex && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
+                if (right < Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0) // Fixed condition
                 {
                     biggest = right;
                 }
 
-                if (biggest != index)
+                if (biggest != index) // Fixed missing parenthesis
                 {
                     Swap(index, biggest);
-                    index = biggest; // Update index for the next iteration
-                }
-                else
-                {
-                    break; // Exit the loop if no swap occurred
+                    return HeapifyDown(biggest);
                 }
             }
             return index;
