@@ -231,7 +231,7 @@ namespace Lab1_RBTree
             return predecessor;
         }
 
-        // GPT
+        // Gemini
         public bool Search(TElement element)
         {
             var currentNode = Root;
