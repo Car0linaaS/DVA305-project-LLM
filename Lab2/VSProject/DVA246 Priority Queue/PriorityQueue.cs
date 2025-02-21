@@ -30,8 +30,6 @@
         private int LastIndex => heap.Count - 1;
         private bool IsEmpty => Count == 0;
 
-        // START OF TEST AREA
-
         static private int LeftChild(int index)
         {
             return index * 2 + 1;
@@ -40,17 +38,48 @@
         {
             return index * 2 + 2;
         }
+
+        // START OF TEST AREA
+
         static private int Parent(int index)
         {
-            return (index + 1) / 2;
+            return (index - 1) * 2;
         }
-
         private void Swap(int i, int j)
         {
-            (heap[j], heap[i]) = (heap[i], heap[j]);
+            (heap[j], heap[i]) = (heap[i], heap[j]));
+        }
+        public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
+        {
+            enableAnalysisCounting = true;
+            ComputationalSteps = 0;
+            var newNode = new QueueElement<TElement, TPriority(element, priority);
+            heap.Add(newnode);
+            int nodeIndex = HeapifyUp(LastIndex);
+            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex);
+        }
+        private int HeapifyUp(int index)
+        {
+            if (enableAnalysisCounting)
+            {
+                ComputationalSteps++;
+            }
+            int parent;
+            if (index < Count && index >= 0)
+            {
+                parent = Parent(index);
+                if (compare(Compare(heap[index].Priority), heap[parent].Priority) >= 0)
+                {
+                    Swap(parent, index);
+                    return HeapifyUp(parent);
+                }
+            }
+            return index;
+        }
         }
 
-        // Gemini
+        // END OF TEST AREA
+
         public IPriorityQueueHandle<TElement, TPriority> Dequeue()
         {
             enableAnalysisCounting = true;
@@ -98,25 +127,6 @@
                 }
             }
             return index;
-        }
-
-        // END OF TEST AREA
-
-        // Inserts an element with the given priority and heapify up to fix potential violations
-        // Returns an element that can be used to get the associated value and get/set the associated priority
-        public IPriorityQueueHandle<TElement, TPriority> Enqueue(TElement element, TPriority priority)
-        {
-            // Reset steps
-            enableAnalysisCounting = true;
-            ComputationalSteps = 0;
-
-            var newNode = new QueueElement<TElement, TPriority>(element, priority);
-
-            heap.Add(newNode);
-
-            int nodeIndex = HeapifyUp(LastIndex);
-
-            return new QueueElementHandle<TElement, TPriority>(element, priority, this, nodeIndex);
         }
 
         // Removes the top element from the queue passing out the element and the priority (through the out parameters)
@@ -177,34 +187,6 @@
                 heap[i].Priority = prio;
                 return HeapifyDown(i);
             }
-        }
-
-        // Heapify-up: if the position of a node (A[i]) violates the
-        // property in relation to its parent - ”float up”
-        // Returns the new index of the node
-        private int HeapifyUp(int index)
-        {
-            // If counting is enabled, increase the computationalsteps
-            if (enableAnalysisCounting)
-            {
-                ComputationalSteps++;
-            }
-
-            int parent;
-
-            if (index < Count && index > 0)
-            {
-                parent = Parent(index);
-
-                // If i is bigger than parent, swap places and propagate upwards
-                if (compare.Compare(heap[index].Priority, heap[parent].Priority) > 0)
-                {
-                    Swap(parent, index);
-                    return HeapifyUp(parent);
-                }
-            }
-
-            return index;
         }
 
         // Helper method for unit testing
