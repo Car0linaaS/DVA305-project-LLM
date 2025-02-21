@@ -9,7 +9,7 @@ namespace Lab4_LCS
     public class LCS
     {
         // START OF TEST AREA
-        // GPT
+        // Gemini
         public int GetLcsLength(string string1, string string2)
         {
             string shorterString = string2;
@@ -19,28 +19,24 @@ namespace Lab4_LCS
                 shorterString = string1;
                 longerString = string2;
             }
-            int shorterLength = shorterString.Length; // Changed float to int
+            int shorterLength = shorterString.Length;
             int longerLength = longerString.Length;
-            int[] tableArray = new int[shorterLength + 1]; // Fixed array initialization
-
-            for (int i = 1; i <= longerLength; i++) // Fixed missing semicolon in loop
+            int[,] tableArray = new int[shorterLength + 1, longerLength + 1];
+            for (int i = 1; i <= longerLength; i++)
             {
-                int prevRowAndColumnValue = 0;
-                for (int j = 1; j <= shorterLength; j++) // Changed `<` to `<=` for correct indexing
+                for (int j = 1; j <= shorterLength; j++)
                 {
-                    int currentValueBeforeOverwritten = tableArray[j]; // Fixed incorrect indexing from `i` to `j`
                     if (longerString[i - 1] == shorterString[j - 1])
                     {
-                        tableArray[j] = prevRowAndColumnValue + 1;
+                        tableArray[j, i] = tableArray[j - 1, i - 1] + 1;
                     }
                     else
                     {
-                        tableArray[j] = Math.Max(tableArray[j - 1], tableArray[j]);
+                        tableArray[j, i] = Math.Max(tableArray[j - 1, i], tableArray[j, i - 1]);
                     }
-                    prevRowAndColumnValue = currentValueBeforeOverwritten; // Moved outside of else block
                 }
             }
-            return tableArray[shorterLength]; // Fixed index to return correct LCS length
+            return tableArray[shorterLength, longerLength];
         }
         // END OF TEST AREA
     }
