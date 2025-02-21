@@ -231,7 +231,7 @@ namespace Lab1_RBTree
             return predecessor;
         }
 
-        // GPT
+        // Gemini
         public bool Search(TElement element)
         {
             var currentNode = Root;
@@ -239,7 +239,7 @@ namespace Lab1_RBTree
             while (currentNode != Nil)
             {
                 if (element.CompareTo(currentNode!.Data) < 0) { currentNode = currentNode.Left; }
-                else if (element.CompareTo(currentNode.Data) > 0) { currentNode = currentNode.Right; }
+                else if (element.CompareTo(currentNode!.Data) > 0) { currentNode = currentNode.Right; }
                 else { return true; }
             }
 
