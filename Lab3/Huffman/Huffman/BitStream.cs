@@ -29,14 +29,14 @@
         // Write one bit to buffer, output one byte to stream for each 8 bits
         public void WriteBit(bool bit)
         {
-            buffer |= (byte)((bit ? 1 : 0) << (8 - bitsWritten)); // Added missing semicolon
+            buffer |= (byte)((bit ? 1 : 0) << (7 - bitsWritten)); // Corrected shift amount
             bitsWritten++;
 
-            if (bitsWritten == 8) // Fixed comparison
+            if (bitsWritten == 8) // Corrected assignment to comparison
             {
                 stream.WriteByte(buffer);
                 buffer = 0;
-                bitsWritten = 0; // Reset counter after writing
+                bitsWritten = 0; // Reset bitsWritten
             }
         }
 
