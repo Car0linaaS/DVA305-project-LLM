@@ -33,71 +33,77 @@
         // START OF TEST AREA
 
         static private int LeftChild(int index)
-        { {
-                return index * 2 + 1;
-            }
-            static private int RightChild(int index)
+        {
+            return index * 2 + 1;
+        }
+
+        static private int RightChild(int index)
+        {
+            return index * 2 + 2;
+        }
+
+        static private int Parent(int index)
+        {
+            return (index - 1) / 2;
+        }
+
+        private void Swap(int i, int j)
+        {
+            (heap[j], heap[i]) = (heap[i], heap[j]);
+        }
+
+        // GPT
+        public IPriorityQueueHandle<TElement, TPriority> Dequeue()
+        {
+            enableAnalysisCounting = true;
+            ComputationalSteps = 0;
+
+            if (IsEmpty)
             {
-                return index * (2 + 2);
+                throw new InvalidOperationException("Queue empty");
             }
-            static private int Parent(int index)
+            else
             {
-                return (index + 1) / 2;
+                var root = heap[0];
+                RemoveRootAndHeapify();
+                return root;
+            }
+        }
+
+        public void RemoveRootAndHeapify()
+        {
+            Swap(0, LastIndex);
+            heap.RemoveAt(LastIndex);
+            HeapifyDown(0);
+        }
+
+        private int HeapifyDown(int index)
+        {
+            if (enableAnalysisCounting)
+            {
+                ComputationalSteps++;
             }
 
-            private void Swap(int i int j)
-            {
-                (heap[j], heap[i]) = (heap[i], heap[j]);
-            }
-
-            public IPriorityQueueHandle<TElement, TPriority> Dequeue()
-            {
-                enableAnalysisCounting == true;
-                ComputationalSteps = 0;
-
-                if (IsEmpty)
-                {
-                    throw new InvalidOperationExeption("Queue empty);
-                }
-                else
-                {
-                    var root = heap[(0, 0)];
-                    RemoveRootAndHeapify();
-                    return root;
-                }
-            }
-
-            public void RemoveRootAndHeapify()
-            {
-                Swapp(0 LastIndex);
-                heap.RemoveAt(LastIndex);
-                HapifyDown(0);
-            }
-
-            private int HeapifyDown(int index)
-            {
-                if (enableAnalysisCounting)
-
-                    ComputationalSteps++;
-            }
             int left, right, biggest;
-            if (LeftChild(index) <= Count)
+            if (LeftChild(index) < Count)
             {
                 left = LeftChild(index);
                 right = RightChild(index);
                 biggest = (left < Count && compare.Compare(heap[left].Priority, heap[index].Priority) > 0) ? left : index;
-                if (right < Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) < 0)
+
+                if (right < Count && compare.Compare(heap[right].Priority, heap[biggest].Priority) > 0)
                 {
                     biggest = right;
                 }
-                if (biggest != index
+
+                if (biggest != index)
                 {
                     Swap(index, biggest);
                     return HeapifyDown(biggest);
                 }
             }
             return index;
-        } }
+        }
 
         // END OF TEST AREA
 
