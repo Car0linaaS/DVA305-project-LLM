@@ -9,7 +9,7 @@ namespace Lab4_LCS
     public class LCS
     {
         // START OF TEST AREA
-        // GPT
+        // Gemini
         public int GetLcsLength(string string1, string string2)
         {
             string shorterString = string2;
@@ -22,20 +22,19 @@ namespace Lab4_LCS
             int shorterLength = shorterString.Length;
             int longerLength = longerString.Length;
             int[] tableArray = new int[shorterLength + 1];
-
-            for (int i = 1; i <= longerLength; i++) // Fixed loop condition
+            for (int i = 1; i <= longerLength; i++)
             {
                 int prevRowAndColumnValue = 0;
-                for (int j = 1; j <= shorterLength; j++) // Fixed increment variable
+                for (int j = 1; j <= shorterLength; j++)
                 {
                     int currentValueBeforeOverwritten = tableArray[j];
                     if (longerString[i - 1] == shorterString[j - 1])
                     {
-                        tableArray[j] = prevRowAndColumnValue + 1; // Added missing semicolon
+                        tableArray[j] = prevRowAndColumnValue + 1;
                     }
                     else
                     {
-                        tableArray[j] = Math.Max(tableArray[j - 1], tableArray[j]); // Added missing comma
+                        tableArray[j] = Math.Max(tableArray[j - 1], tableArray[j]);
                     }
                     prevRowAndColumnValue = currentValueBeforeOverwritten;
                 }
