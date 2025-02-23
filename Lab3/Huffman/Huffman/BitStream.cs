@@ -102,7 +102,7 @@ namespace Huffman
             bitsRemaining = 8;
         }
 
-        bool bit = (buffer & 0b00000001) != 0;
+        bool bit = (buffer & 1) != 0;
 
         buffer >>= 1;
         bitsRemaining--;
