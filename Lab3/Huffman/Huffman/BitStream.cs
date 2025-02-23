@@ -27,14 +27,14 @@
         }
 
         // Write one bit to buffer, output one byte to stream for each 8 bits
-        public void WriteBit(bool bit)  // Fixed method signature
+        public void WriteBit(bool bit)
         {
-            buffer |= (byte)((bit ? 1 : 0) << bitsWritten);  // Fixed bitwise operation
+            buffer |= (byte)((bit ? 1 : 0) << bitsWritten);
             bitsWritten++;
 
             if (bitsWritten == 8)
             {
-                stream.WriteByte(buffer);  // Fixed variable reference
+                stream.WriteByte(buffer);
                 buffer = 0;
                 bitsWritten = 0;
             }

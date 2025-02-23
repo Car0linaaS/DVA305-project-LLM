@@ -7,16 +7,16 @@ namespace Huffman
     {
         public static string ByteToBin(byte b)
         {
-            return Convert.ToString(b, 2).PadLeft(8, '0');  // Fixed conversion and padding
+            return Convert.ToString(b, 2).PadLeft(8, '0');
         }
 
         public static string StrToBinStr(string str)
         {
-            var binStr = new StringBuilder();  // Fixed variable declaration
-            foreach (var c in str)  // Fixed foreach syntax
+            StringBuilder binStr = new StringBuilder();
+            foreach (char c in str)
             {
-                var asciiBytes = Encoding.ASCII.GetBytes(new[] { c });
-                var binaryString = Convert.ToString(asciiBytes[0], 2).PadLeft(8, '0');  // Fixed conversion
+                byte[] asciiBytes = Encoding.ASCII.GetBytes(new char[] { c });
+                string binaryString = Convert.ToString(asciiBytes[0], 2).PadLeft(8, '0');
                 binStr.Append(binaryString);
             }
 
