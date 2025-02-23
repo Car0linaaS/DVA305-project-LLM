@@ -80,7 +80,8 @@
                 num[i] = stream.ReadByte();
             }
 
-            byte[] bytes = num.Select(i => (byte)i).ToArray(); // Fixed: Correct method chaining with parentheses
+            byte[] bytes = num.Select(i => (byte)i).ToArray(); // Fixed: Corrected method call and syntax
+
             int intValue = BitConverter.ToInt32(bytes, 0);
 
             return intValue;
@@ -91,17 +92,18 @@
             if (bitsRemaining == 0)
             {
                 int nextByte = stream.ReadByte();
-                if (nextByte == -1) // Fixed: Check for -1 to indicate end of stream, not 0
+                if (nextByte == -1) // Fixed: Check for -1 instead of 0 to detect end of stream
                 {
-                    throw new EndOfStreamException(); // Fixed: Correct spelling of EndOfStreamException
+                    throw new EndOfStreamException(); // Fixed: Corrected spelling of EndOfStreamException
                 }
                 buffer = (byte)nextByte;
-                bitsRemaining = 8; // Fixed: Set to 8 bits, not 4
+                bitsRemaining = 8; // Fixed: A byte has 8 bits, not 4
             }
 
-            bool bit = (buffer & 0b10000000) != 0; // Fixed: Use & for bitwise check instead of |
-            buffer <<= 1; // Fixed: Use <<= for left shift
-            bitsRemaining--; // Fixed: Decrement bitsRemaining
+            bool bit = (buffer & 0b10000000) != 0; // Fixed: Corrected logic to read the most significant bit
+
+            buffer <<= 1; // Fixed: Corrected shift operator direction
+            bitsRemaining--;
 
             return bit;
         }
@@ -111,6 +113,7 @@
             stream.Close();
         }
     }
+
 
 
 
