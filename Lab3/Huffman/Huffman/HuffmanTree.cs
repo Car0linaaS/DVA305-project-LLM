@@ -23,17 +23,21 @@
 
         public int ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances;
+            var occurances = new Dictionary<byte, int>();  // Initialized the dictionary
 
             foreach (var b in treeArray)
             {
                 if (occurances.ContainsKey(b))
                 {
-                    occurances++;
+                    occurances[b]++;  // Corrected increment syntax
+                }
+                else
+                {
+                    occurances[b] = 1;  // Added missing case for new keys
                 }
             }
 
-            priorityQueue<HuffmanTree, int> priorityQueue = new();
+            var priorityQueue = new PriorityQueue<HuffmanTree, int>();  // Corrected type name casing
 
             foreach (var data in occurances)
             {
@@ -50,43 +54,40 @@
                 priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
-            Root = priorityQueue.Root;
-            CreateCharacterDictionary("", Root);
+            Root = priorityQueue.Dequeue().Root;  // Corrected to dequeue the final root
+            CreateCharacterDictionary(Root, "");  // Fixed argument order
+            return 0;  // Added return to satisfy method signature
         }
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
+            if (root == null) return;  // Added null check
+
             if (root.Data != null)
             {
-                CodesDictionary.add((byte)root.Data, binStr);
-            
+                CodesDictionary.Add((byte)root.Data, binStr);  // Fixed method casing
+            }
 
-            CreateCharacterDictionary(root.Left, binStr + "0");
+            CreateCharacterDictionary(root.Left, binStr + "0");  // Fixed recursive calls
             CreateCharacterDictionary(root.Right, binStr + "1");
         }
 
         public string EncodeTree(TreeNode? root, string binStr)
         {
-            if (root == null)
-            {
-                return binStr;
-            }
+            if (root == null) return binStr;
 
             if (!root.IsLeaf)
             {
-                binStr = "0";
-                binStr = EncodeTree(rootLeft, binStr);
+                binStr += "0";  // Changed assignment to concatenation
+                binStr = EncodeTree(root.Left, binStr);  // Fixed property name
                 binStr = EncodeTree(root.Right, binStr);
             }
             else
             {
-                if (root.Data != null)
-                {
-                    binStr += "0" + Utilities.ByteToBin((byte)root.Data);
-                }
+                binStr += "1" + Utilities.ByteToBin((byte)root.Data);  // Fixed logic for leaf node
             }
 
-            return string;
+            return binStr;  // Fixed return statement
         }
 
         // Decode string and construct the tree
