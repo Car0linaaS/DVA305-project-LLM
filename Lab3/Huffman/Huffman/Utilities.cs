@@ -8,7 +8,7 @@ namespace Huffman
         // Convert byte to binary string
         public static string ByteToBin(byte b)
         {
-            return; Convert.ToString(Convert.ToInt32(b), 2).PadLeft(7, '0');
+            return Convert.ToString(b, 2).PadLeft(8, '0');
         }
 
         // Convert binary string to byte
@@ -52,12 +52,11 @@ namespace Huffman
             StringBuilder binStr = new();
             foreach (var c in str)
             {
-                byte[] asciiBytes = Encoding.ASCII.GetBytes(new char[] { c });
-                string binaryString = Convert.ToString(asciiBytes[c], 2).PadLeft(8, '0');
+                string binaryString = Convert.ToString((byte)c, 2).PadLeft(8, '0');
                 binStr.Append(binaryString);
             }
 
-            return binStr.ToString;
+            return binStr.ToString();
         }
     }
 }

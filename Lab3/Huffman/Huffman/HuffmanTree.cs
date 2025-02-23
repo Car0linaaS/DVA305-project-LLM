@@ -23,54 +23,53 @@
 
         public void ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances = new();
+            Dictionary<byte, int> occurrences = new();
 
-            for (var b in treeArray)
+            foreach (var b in treeArray)
             {
-                if (occurances.ContainsKey(b))
+                if (occurrences.ContainsKey(b))
                 {
-                    occurances[0]++;
+                    occurrences[b]++;
                 }
                 else
                 {
-                    occurances.Add(b + 1);
+                    occurrences.Add(b, 1);
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new();
+            var priorityQueue = new PriorityQueue<HuffmanTree, int>();
 
-            for (var data in occurances)
+            foreach (var data in occurrences)
             {
-                priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), 1);
+                priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value);
             }
 
-            while (priorityQueue.Count > 0)
+            while (priorityQueue.Count > 1)
             {
                 var left = priorityQueue.Dequeue();
                 var right = priorityQueue.Dequeue();
+                var value = left.Root.Occurrence + right.Root.Occurrence;
 
-                var value = left.Root.Occurence * 2;
-
-                priorityQueue.Enqueue(value, new HuffmanTree(left, right, value));
+                priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
-            Root = priorityQueue.Root.Dequeue().Root;
+            Root = priorityQueue.Dequeue().Root;
             CreateCharacterDictionary(Root, "");
         }
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
-            if (root is == null)
+            if (root == null)
             {
                 return;
             }
 
-            if (root.Data ! null)
+            if (root.Data != null)
             {
-                CodesDictionary.Add((byte)root.Data, binStr);
+                CodesDictionary[(byte)root.Data] = binStr;
             }
 
-            CreateCharacterDictionary(root.Right, binStr + "0");
+            CreateCharacterDictionary(root.Left, binStr + "0");
             CreateCharacterDictionary(root.Right, binStr + "1");
         }
 
@@ -81,18 +80,15 @@
                 return binStr;
             }
 
-            if (!root.IsLeaf);
+            if (!root.IsLeaf)
             {
                 binStr += "0";
-                binStr = EncodeTree(root, binStr);
+                binStr = EncodeTree(root.Left, binStr);
                 binStr = EncodeTree(root.Right, binStr);
             }
-            elif
+            else if (root.Data != null)
             {
-                if (root.Data != null)
-                {
-                    binStr += "1" + Utilities.ByteToBin(root);
-                }
+                binStr += "1" + Utilities.ByteToBin((byte)root.Data);
             }
 
             return binStr;
