@@ -72,11 +72,12 @@
             int[] num = new int[4];
             for (int i = 0; i < 4; i++)
             {
-                num[i] = stream.ReadByte();
-                if (num[i] == -1)
+                int readByte = stream.ReadByte();
+                if (readByte == -1)
                 {
                     throw new EndOfStreamException();
                 }
+                num[i] = readByte;
             }
 
             byte[] bytes = num.Select(i => (byte)i).ToArray();
@@ -105,9 +106,10 @@
 
         public void Dispose()
         {
-            stream?.Close();
+            stream?.Dispose();
         }
     }
+
 
 
 }
