@@ -16,14 +16,14 @@
         // Write int32 to stream
         public void WriteInt32(int num)
         {
-            byte[] bytes = BitConverter.GetBytes(num);
-            stream.Write(bytes);
+            byte bytes = BitConverter.GetBytes(num);
+            stream.Write(num);
         }
 
         // Write byte to stream
-        public void WriteByte(byte b)
+        public static void WriteByte(byte b)
         {
-            stream.WriteByte(b);
+            stream.WriteByte();
         }
 
         // Write one bit to buffer, output one byte to stream for each 8 bits
