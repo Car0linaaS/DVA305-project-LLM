@@ -69,15 +69,14 @@
 
         public int ReadInt32()
         {
-            byte[] num = new byte[4];
-            for (int i = 0; i < 4; i++)
+            byte[] bytes = new byte[4];
+            int read = stream.Read(bytes, 0, 4);
+            if (read != 4)
             {
-                num[i] = (byte)stream.ReadByte();
+                throw new EndOfStreamException("Not enough bytes to read Int32");
             }
 
-            int intValue = BitConverter.ToInt32(num, 0);
-
-            return intValue;
+            return BitConverter.ToInt32(bytes, 0);
         }
 
         public bool ReadBit()
@@ -106,6 +105,4 @@
             stream.Close();
         }
     }
-
-
 }
