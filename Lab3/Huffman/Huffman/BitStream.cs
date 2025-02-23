@@ -54,32 +54,34 @@
         }
     }
 
-    class BitStreamReader, IDisposable
+    class BitStreamReader : IDisposable
     {
         private readonly FileStream stream;
         private byte buffer;
         private int bitsRemaining;
 
-        BitStreamReader(filePath)
+        public BitStreamReader(string filePath)
         {
-            stream = new FileStream(filePath, FileMode.Create);
-            buffer = 8;
-            bitsRemaining = 8;
+            stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            buffer = 0;
+            bitsRemaining = 0;
         }
 
-        public void ReadInt32()
+        public int ReadInt32()
         {
             int[] num = new int[4];
             for (int i = 0; i < 4; i++)
             {
-                num[i] = stream.ReadByte();
+                int byteRead = stream.ReadByte();
+                //if (byteRead == -1)
+                //{
+                //    throw new EndOfStreamException();
+                //}
+                num[i] = byteRead;
             }
 
             byte[] bytes = num.Select(i => (byte)i).ToArray();
-
-            int intValue = BitConverter.ToInt32(bytes, 0);
-
-            return intValue;
+            return BitConverter.ToInt32(bytes, 0);
         }
 
         public bool ReadBit()
@@ -89,15 +91,14 @@
                 int nextByte = stream.ReadByte();
                 if (nextByte == -1)
                 {
-                    throw EndOfStreamException();
+                    throw new EndOfStreamException();
                 }
                 buffer = (byte)nextByte;
                 bitsRemaining = 8;
             }
 
-            bool bit = (buffer & 0b00000001) != 0;
-
-            buffer >>= 1;
+            bool bit = (buffer & 0b10000000) != 0;
+            buffer <<= 1;
             bitsRemaining--;
 
             return bit;
@@ -105,9 +106,8 @@
 
         public void Dispose()
         {
-            stream.Close();
+            stream?.Dispose();
         }
     }
-
 
 }
