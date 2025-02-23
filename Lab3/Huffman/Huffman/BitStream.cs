@@ -29,7 +29,7 @@
         // Write one bit to buffer, output one byte to stream for each 8 bits
         public void WriteBit(bool bit)
         {
-            buffer |= (byte)((bit ? 1 : 0) << bitsWritten);
+            buffer |= (byte)((bit ? 1 : 0) << (7 - bitsWritten));
             bitsWritten++;
 
             if (bitsWritten == 8)

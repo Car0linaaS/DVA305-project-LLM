@@ -21,9 +21,9 @@
             CodesDictionary = new Dictionary<byte, string>();
         }
 
-        public int ConstructTreeFromArray(byte[] treeArray)
+        public void ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances = new Dictionary<byte, int>();
+            Dictionary<byte, int> occurances = new();
 
             foreach (var b in treeArray)
             {
@@ -33,11 +33,11 @@
                 }
                 else
                 {
-                    occurances[b] = 1;
+                    occurances.Add(b, 1);
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new PriorityQueue<HuffmanTree, int>();
+            PriorityQueue<HuffmanTree, int> priorityQueue = new();
 
             foreach (var data in occurances)
             {
@@ -54,9 +54,8 @@
                 priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
-            Root = priorityQueue.Peek().Root;
+            Root = priorityQueue.Dequeue().Root;
             CreateCharacterDictionary(Root, "");
-            return 0;
         }
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
@@ -65,6 +64,7 @@
             {
                 return;
             }
+
             if (root.Data != null)
             {
                 CodesDictionary.Add((byte)root.Data, binStr);

@@ -5,22 +5,10 @@ namespace Huffman
 {
     public static class Utilities
     {
+        // Convert byte to binary string
         public static string ByteToBin(byte b)
         {
-            return Convert.ToString(b, 2).PadLeft(8, '0');
-        }
-
-        public static string StrToBinStr(string str)
-        {
-            StringBuilder binStr = new StringBuilder();
-            foreach (char c in str)
-            {
-                byte[] asciiBytes = Encoding.ASCII.GetBytes(new char[] { c });
-                string binaryString = Convert.ToString(asciiBytes[0], 2).PadLeft(8, '0');
-                binStr.Append(binaryString);
-            }
-
-            return binStr.ToString();
+            return Convert.ToString(Convert.ToInt32(b), 2).PadLeft(8, '0');
         }
 
         // Convert binary string to byte
@@ -55,6 +43,21 @@ namespace Huffman
             }
 
             return segments;
+        }
+
+
+        // String to binary string
+        public static string StrToBinStr(string str)
+        {
+            StringBuilder binStr = new();
+            foreach (var c in str)
+            {
+                byte[] asciiBytes = Encoding.ASCII.GetBytes(new char[] { c });
+                string binaryString = Convert.ToString(asciiBytes[0], 2).PadLeft(8, '0');
+                binStr.Append(binaryString);
+            }
+
+            return binStr.ToString();
         }
     }
 }

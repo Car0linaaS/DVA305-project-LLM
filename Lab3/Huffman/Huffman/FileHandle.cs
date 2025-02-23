@@ -13,7 +13,7 @@ namespace Huffman
         }
 
 
-        public void CompressFile()
+        public bool CompressFile()
         {
             string encodedTree;
             List<bool> encodedFile;
@@ -22,7 +22,7 @@ namespace Huffman
             if (!FileExists())
             {
                 Console.Write("File does not exist. ");
-                return;
+                return false;
             }
 
             try
@@ -32,64 +32,26 @@ namespace Huffman
             catch (Exception e)
             {
                 Console.WriteLine(e.Message + " ");
-                return;
+                return false;
             }
 
             Console.WriteLine("File compression starting...");
 
             if (originalContent.Length > 0)
             {
-                ConstructTreeFromArray(originalContent);
+                HuffmanTree.ConstructTreeFromArray(originalContent);
 
                 var extension = Path.GetExtension(FilePath);
-                encodedTree = EncodeTree(Root, "");
+                encodedTree = HuffmanTree.EncodeTree(HuffmanTree.Root, "");
                 encodedFile = EncodeFile(originalContent);
 
                 WriteBinaryToFile(extension, encodedTree, encodedFile);
+                return true;
             }
-        }
-
-        private void WriteBinaryToFile(string ext, string encodedTree, List<bool> compressedData)
-        {
-            using var writer = new BitStreamWriter(RemoveFileExtension() + ".hf");
-
-            string extensionEncoded = Utilities.StrToBinStr(ext);
-
-            writer.WriteInt32(extensionEncoded.Length);
-            writer.WriteInt32(encodedTree.Length);
-            writer.WriteInt32(compressedData.Count);
-
-            foreach (var bit in extensionEncoded)
+            else
             {
-                writer.WriteBit(bit == '1');
+                return false;
             }
-
-            foreach (var bit in encodedTree)
-            {
-                writer.WriteBit(bit == '1');
-            }
-
-            foreach (var boolean in compressedData)
-            {
-                writer.WriteBit(boolean);
-            }
-        }
-
-        public List<bool> EncodeFile(byte[] content)
-        {
-            List<bool> encodedBits = new List<bool>();
-
-            foreach (var b in content)
-            {
-                string huffmanCode = CodesDictionary[b];
-
-                foreach (var bit in huffmanCode)
-                {
-                    encodedBits.Add(bit == '1');
-                }
-            }
-
-            return encodedBits;
         }
 
         // Decompress file, return true if successful otherwise false
@@ -133,6 +95,33 @@ namespace Huffman
             return true;
         }
 
+
+        // Write the encoded tree and the compressed file content to a file
+        private void WriteBinaryToFile(string ext, string encodedTree, List<bool> compressedData)
+        {
+            using BitStreamWriter writer = new(RemoveFileExtension() + ".hf");
+
+            var extensionEncoded = Utilities.StrToBinStr(ext);
+
+            writer.WriteInt32(extensionEncoded.Length);
+            writer.WriteInt32(encodedTree.Length);
+            writer.WriteInt32(compressedData.Count);
+
+            foreach (var bit in extensionEncoded)
+            {
+                writer.WriteBit(bit == '1');
+            }
+
+            foreach (var bit in encodedTree)
+            {
+                writer.WriteBit(bit == '1');
+            }
+
+            foreach (var boolean in compressedData)
+            {
+                writer.WriteBit(boolean);
+            }
+        }
 
         // Read encoded tree and data from file
         private bool ReadBinaryFromFile(out string encodedExt, out string encodedTree, out List<bool> compressedData)
@@ -198,6 +187,24 @@ namespace Huffman
             }
 
             return true;
+        }
+
+        // Encode file content using huffman dictionary
+        public List<bool> EncodeFile(byte[] content)
+        {
+            List<bool> encodedBits = new();
+
+            foreach (var b in content)
+            {
+                string huffmanCode = HuffmanTree.CodesDictionary[b];
+
+                foreach (var bit in huffmanCode)
+                {
+                    encodedBits.Add(bit == '1');
+                }
+            }
+
+            return encodedBits;
         }
 
         // Decode file content using huffman dictionary
