@@ -67,7 +67,7 @@
 
         public BitStreamReader(string filePath)
         {
-            stream = new FileStream(filePath, FileMode.Open); // Fixed: FileMode.Open instead of FileMode = Open
+            stream = new FileStream(filePath, FileMode.Open); // Fixed FileMode
             buffer = 0;
             bitsRemaining = 0;
         }
@@ -75,13 +75,17 @@
         public int ReadInt32()
         {
             int[] num = new int[4];
-            for (int i = 0; i < 4; i++) // Fixed: i < 4 instead of i <= 4 to avoid IndexOutOfRangeException
+            for (int i = 0; i < 4; i++) // Changed loop condition to i < 4
             {
-                num[i] = stream.ReadByte();
+                int value = stream.ReadByte();
+                if (value == -1)
+                {
+                    throw new EndOfStreamException(); // Added check for end of stream
+                }
+                num[i] = value;
             }
 
-            byte[] bytes = num.Select(i => (byte)i).ToArray(); // Fixed: Corrected method call and syntax
-
+            byte[] bytes = num.Select(i => (byte)i).ToArray(); // Fixed Select usage
             int intValue = BitConverter.ToInt32(bytes, 0);
 
             return intValue;
@@ -92,18 +96,17 @@
             if (bitsRemaining == 0)
             {
                 int nextByte = stream.ReadByte();
-                if (nextByte == -1) // Fixed: Check for -1 instead of 0 to detect end of stream
+                if (nextByte == -1) // Fixed end-of-stream check
                 {
-                    throw new EndOfStreamException(); // Fixed: Corrected spelling of EndOfStreamException
+                    throw new EndOfStreamException(); // Fixed exception name
                 }
                 buffer = (byte)nextByte;
-                bitsRemaining = 8; // Fixed: A byte has 8 bits, not 4
+                bitsRemaining = 8; // Fixed number of bits
             }
 
-            bool bit = (buffer & 0b10000000) != 0; // Fixed: Corrected logic to read the most significant bit
-
-            buffer <<= 1; // Fixed: Corrected shift operator direction
-            bitsRemaining--;
+            bool bit = (buffer & 0b10000000) != 0; // Fixed bit extraction
+            buffer <<= 1; // Fixed shift operator direction
+            bitsRemaining--; // Decremented bitsRemaining
 
             return bit;
         }
@@ -113,8 +116,5 @@
             stream.Close();
         }
     }
-
-
-
 
 }
