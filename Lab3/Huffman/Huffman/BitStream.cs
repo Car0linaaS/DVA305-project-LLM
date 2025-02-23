@@ -20,9 +20,30 @@
             stream.Write(bytes, 0, bytes.Length);
         }
 
-        public static void WriteByte(byte b)
+        public void WriteBit(bool bit)
         {
-            stream.WriteByte(b);
+            if (bit)
+            {
+                currentByte |= (byte)(1 << bitIndex);
+            }
+
+            bitIndex++;
+
+            if (bitIndex == 8)
+            {
+                stream.WriteByte(currentByte);
+                currentByte = 0;
+                bitIndex = 0;
+            }
+        }
+
+        public void Dispose()
+        {
+            if (bitIndex > 0)
+            {
+                stream.WriteByte(currentByte);
+            }
+            stream.Dispose();
         }
 
         // Write one bit to buffer, output one byte to stream for each 8 bits

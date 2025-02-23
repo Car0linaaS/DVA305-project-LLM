@@ -15,8 +15,8 @@ namespace Huffman
             StringBuilder binStr = new();
             foreach (var c in str)
             {
-                byte asciiByte = Encoding.ASCII.GetBytes(new[] { c })[0];
-                string binaryString = Convert.ToString(asciiByte, 2).PadLeft(8, '0');
+                byte[] asciiBytes = Encoding.ASCII.GetBytes(new char[] { c });
+                string binaryString = Convert.ToString(asciiBytes[0], 2).PadLeft(8, '0');
                 binStr.Append(binaryString);
             }
 
