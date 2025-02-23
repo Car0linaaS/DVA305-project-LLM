@@ -23,7 +23,7 @@
 
         public void ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances = new(); // Added ,int
+            Dictionary<byte, int> occurances = new();
 
             foreach (var b in treeArray)
             {
@@ -33,18 +33,18 @@
                 }
                 else
                 {
-                    occurances.Add(b, 1); // Corrected to 1
+                    occurances.Add(b, 1);
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new(); // Fixed typo
+            PriorityQueue<HuffmanTree, int> priorityQueue = new();
 
             foreach (var data in occurances)
             {
                 priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value);
             }
 
-            while (priorityQueue.Count > 1) // Corrected condition
+            while (priorityQueue.Count > 1)
             {
                 var left = priorityQueue.Dequeue();
                 var right = priorityQueue.Dequeue();
@@ -60,18 +60,18 @@
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
-            if (root == null) // Corrected condition
+            if (root == null)
             {
                 return;
             }
 
             if (root.Data != null)
             {
-                CodesDictionary.Add((byte)root.Data, binStr); // Corrected type cast
+                CodesDictionary.Add((byte)root.Data, binStr);
             }
 
             CreateCharacterDictionary(root.Left, binStr + "0");
-            CreateCharacterDictionary(root.Right, binStr + "1"); // Corrected to "1"
+            CreateCharacterDictionary(root.Right, binStr + "1");
         }
 
         public string EncodeTree(TreeNode? root, string binStr)
@@ -81,16 +81,18 @@
                 return binStr;
             }
 
-            if (root.IsLeaf)
+            if (!root.IsLeaf)
             {
                 binStr += "0";
-                return binStr; // Return after leaf node
+                binStr = EncodeTree(root.Left, binStr);
+                binStr = EncodeTree(root.Right, binStr);
             }
             else
             {
-                binStr += "1" + Utilities.ByteToBin((byte)root.Data);
-                binStr = EncodeTree(root.Left, binStr); // Assign the result
-                binStr = EncodeTree(root.Right, binStr); // Assign the result
+                if (root.Data != null)
+                {
+                    binStr += "1" + Utilities.ByteToBin((byte)root.Data);
+                }
             }
 
             return binStr;

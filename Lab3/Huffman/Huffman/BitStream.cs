@@ -29,14 +29,14 @@
         // Write one bit to buffer, output one byte to stream for each 8 bits
         public void WriteBit(bool bit)
         {
-            buffer |= (byte)((bit ? 1 : 0) << (7 - bitsWritten)); // Corrected shift amount
+            buffer |= (byte)((bit ? 1 : 0) << (7 - bitsWritten));
             bitsWritten++;
 
-            if (bitsWritten == 8) // Corrected condition
+            if (bitsWritten == 8)
             {
                 stream.WriteByte(buffer);
                 buffer = 0;
-                bitsWritten = 0; // Reset bitsWritten
+                bitsWritten = 0;
             }
         }
 
@@ -76,7 +76,7 @@
         public int ReadInt32()
         {
             int[] num = new int[4];
-            for(int i = 0; i < 4; i++)
+            for (int i = 0; i < 4; i++)
             {
                 num[i] = stream.ReadByte();
             }
@@ -109,7 +109,7 @@
             bool bit = (buffer & 0b10000000) != 0;
 
             // Shift buffer bits to the left by one, (discarding the msb) to prepare for the next bit 
-            buffer <<= 1; 
+            buffer <<= 1;
             bitsRemaining--;
 
             return bit;
