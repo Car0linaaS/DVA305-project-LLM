@@ -17,33 +17,13 @@
         public void WriteInt32(int num)
         {
             byte[] bytes = BitConverter.GetBytes(num);
-            stream.Write(bytes, 0, bytes.Length);
+            stream.Write(bytes);
         }
 
-        public void WriteBit(bool bit)
+        // Write byte to stream
+        public void WriteByte(byte b)
         {
-            if (bit)
-            {
-                currentByte |= (byte)(1 << bitIndex);
-            }
-
-            bitIndex++;
-
-            if (bitIndex == 8)
-            {
-                stream.WriteByte(currentByte);
-                currentByte = 0;
-                bitIndex = 0;
-            }
-        }
-
-        public void Dispose()
-        {
-            if (bitIndex > 0)
-            {
-                stream.WriteByte(currentByte);
-            }
-            stream.Dispose();
+            stream.WriteByte(b);
         }
 
         // Write one bit to buffer, output one byte to stream for each 8 bits

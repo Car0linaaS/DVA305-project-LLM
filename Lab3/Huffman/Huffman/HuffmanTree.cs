@@ -25,7 +25,7 @@
         {
             Dictionary<byte, int> occurances = new();
 
-    for (var b in treeArray)
+            foreach (var b in treeArray)
             {
                 if (occurances.ContainsKey(b))
                 {
@@ -51,7 +51,7 @@
 
                 var value = left.Root.Occurence + right.Root.Occurence;
 
-                priorityQueue.Enqueue(new HuffmanTree(left, right, value, null), value);
+                priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
             Root = priorityQueue.Dequeue().Root;
@@ -81,18 +81,18 @@
                 return binStr;
             }
 
-            if (root.IsLeaf)
+            if (!root.IsLeaf)
+            {
+                binStr += "0";
+                binStr = EncodeTree(root.Left, binStr);
+                binStr = EncodeTree(root.Right, binStr);
+            }
+            else
             {
                 if (root.Data != null)
                 {
                     binStr += "1" + Utilities.ByteToBin((byte)root.Data);
                 }
-            }
-            else
-            {
-                binStr += "0";
-                binStr = EncodeTree(root.Left, binStr);
-                binStr = EncodeTree(root.Right, binStr);
             }
 
             return binStr;
