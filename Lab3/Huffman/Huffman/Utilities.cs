@@ -11,6 +11,19 @@ namespace Huffman
             return Convert.ToString(b, 2).PadLeft(8, '0');
         }
 
+        public static string StrToBinStr(string str)
+        {
+            StringBuilder binStr = new();
+            foreach (var c in str)
+            {
+                byte[] asciiBytes = Encoding.ASCII.GetBytes(new char[] { c });
+                string binaryString = Convert.ToString(asciiBytes[0], 2).PadLeft(8, '0');
+                binStr.Append(binaryString);
+            }
+
+            return binStr.ToString();
+        }
+
         // Convert binary string to byte
         public static byte BinToByte(string str)
         {
@@ -45,18 +58,5 @@ namespace Huffman
             return segments;
         }
 
-
-        // String to binary string
-        public static string StrToBinStr(string str)
-        {
-            StringBuilder binStr = new();
-            foreach (var c in str)
-            {
-                string binaryString = Convert.ToString((byte)c, 2).PadLeft(8, '0');
-                binStr.Append(binaryString);
-            }
-
-            return binStr.ToString();
-        }
     }
 }
