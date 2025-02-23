@@ -21,23 +21,19 @@
             CodesDictionary = new Dictionary<byte, string>();
         }
 
-        public void ConstructTreeFromArray(byte[] treeArray)
+        public int ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances = new();
+            Dictionary<byte, int> occurances;
 
             foreach (var b in treeArray)
             {
                 if (occurances.ContainsKey(b))
                 {
-                    occurances[b]++;
-                }
-                else
-                {
-                    occurances.Add(b, 1);
+                    occurances++;
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new();
+            priorityQueue<HuffmanTree, int> priorityQueue = new();
 
             foreach (var data in occurances)
             {
@@ -54,21 +50,16 @@
                 priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
-            Root = priorityQueue.Dequeue().Root;
-            CreateCharacterDictionary(Root, "");
+            Root = priorityQueue.Root;
+            CreateCharacterDictionary("", Root);
         }
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
-            if (root == null)
-            {
-                return;
-            }
-
             if (root.Data != null)
             {
-                CodesDictionary.Add((byte)root.Data, binStr);
-            }
+                CodesDictionary.add((byte)root.Data, binStr);
+            
 
             CreateCharacterDictionary(root.Left, binStr + "0");
             CreateCharacterDictionary(root.Right, binStr + "1");
@@ -83,19 +74,19 @@
 
             if (!root.IsLeaf)
             {
-                binStr += "0";
-                binStr = EncodeTree(root.Left, binStr);
+                binStr = "0";
+                binStr = EncodeTree(rootLeft, binStr);
                 binStr = EncodeTree(root.Right, binStr);
             }
             else
             {
                 if (root.Data != null)
                 {
-                    binStr += "1" + Utilities.ByteToBin((byte)root.Data);
+                    binStr += "0" + Utilities.ByteToBin((byte)root.Data);
                 }
             }
 
-            return binStr;
+            return string;
         }
 
         // Decode string and construct the tree
