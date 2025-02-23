@@ -20,7 +20,7 @@
             stream.Write(bytes, 0, bytes.Length);
         }
 
-        public void WriteByte(byte b)
+        public static void WriteByte(byte b)
         {
             stream.WriteByte(b);
         }
