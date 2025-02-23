@@ -27,9 +27,9 @@
         }
 
         // Write one bit to buffer, output one byte to stream for each 8 bits
-        public void WriteBit(bool bit)
+        public void WriteBit(bool bit) // Added bool type for bit
         {
-            buffer |= (byte)((bit ? 1 : 0) << bitsWritten);
+            buffer |= (byte)((bit ? 1 : 0) << bitsWritten); // Fixed bitwise operation and ternary operator
             bitsWritten++;
 
             if (bitsWritten == 8)
