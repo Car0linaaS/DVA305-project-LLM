@@ -62,7 +62,7 @@
 
         public BitStreamReader(string filePath)
         {
-            stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
+            stream = new FileStream(filePath, FileMode.Open);
             buffer = 0;
             bitsRemaining = 0;
         }
@@ -81,7 +81,6 @@
             }
 
             int intValue = BitConverter.ToInt32(bytes, 0);
-
             return intValue;
         }
 
@@ -99,7 +98,6 @@
             }
 
             bool bit = (buffer & 0b10000000) != 0;
-
             buffer <<= 1;
             bitsRemaining--;
 
@@ -111,6 +109,5 @@
             stream.Close();
         }
     }
-
 
 }
