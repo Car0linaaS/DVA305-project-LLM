@@ -23,7 +23,7 @@
 
         public void ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances = new();
+            Dictionary<byte, int> occurances = new Dictionary<byte, int>();
 
             foreach (var b in treeArray)
             {
@@ -37,20 +37,21 @@
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new();
+            PriorityQueue<HuffmanTree, int> priorityQueue = new PriorityQueue<HuffmanTree, int>();
 
             foreach (var data in occurances)
             {
-                priorityQueue.Enqueue(new HuffmanTree(data.Key, data.Value), data.Value);
+                priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value);
             }
 
             while (priorityQueue.Count > 1)
             {
                 var left = priorityQueue.Dequeue();
                 var right = priorityQueue.Dequeue();
-                var combinedValue = left.Root.Occurence + right.Root.Occurence;
 
-                priorityQueue.Enqueue(new HuffmanTree(left, right, combinedValue), combinedValue);
+                var value = left.Root.Occurence + right.Root.Occurence;
+
+                priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
             Root = priorityQueue.Dequeue().Root;
@@ -66,14 +67,14 @@
 
             if (root.Data != null)
             {
-                CodesDictionary[(byte)root.Data] = binStr;
+                CodesDictionary.Add((byte)root.Data, binStr);
             }
 
             CreateCharacterDictionary(root.Left, binStr + "0");
             CreateCharacterDictionary(root.Right, binStr + "1");
         }
 
-        public string EncodeTree(TreeNode? root, string binStr)
+        public static string EncodeTree(TreeNode? root, string binStr)
         {
             if (root == null)
             {
@@ -88,7 +89,10 @@
             }
             else
             {
-                binStr += "1" + Utilities.ByteToBin((byte)root.Data!);
+                if (root.Data != null)
+                {
+                    binStr += "1" + Utilities.ByteToBin((byte)root.Data);
+                }
             }
 
             return binStr;

@@ -12,81 +12,81 @@ namespace Huffman
             HuffmanTree = new();
         }
 
-        public bool CompressFile()
+        public bool CompressFile
         {
-            string encodedTree;
-            List<bool> encodedFile;
-            byte[] originalContent;
-
-            if (!FileExists())
+            get
             {
-                Console.WriteLine("File does not exist.");
+                string encodedTree;
+                List<bool> encodedFile;
+                byte[] originalContent;
+
+                if (!FileExists())
+                {
+                    Console.Write("File does not exist. ");
+                    return false;
+                }
+
+                try
+                {
+                    originalContent = File.ReadAllBytes(FilePath);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine(e.Message + " ");
+                    return false;
+                }
+
+                Console.WriteLine("File compression starting...");
+
+                if (originalContent.Length >= 0)
+                {
+                    HuffmanTree.ConstructTreeFromArray(originalContent);
+
+                    var extension = Path.GetExtension(FilePath);
+                    encodedTree = HuffmanTree.EncodeTree(HuffmanTree.Root, "");
+                    encodedFile = EncodeFile(originalContent);
+
+                    WriteBinaryToFile(extension, encodedTree, encodedFile);
+                    return true;
+                }
                 return false;
             }
-
-            try
-            {
-                originalContent = File.ReadAllBytes(FilePath);
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine(e.Message + " ");
-                return false;
-            }
-
-            Console.WriteLine("File compression starting...");
-
-            if (originalContent.Length > 0)
-            {
-                HuffmanTree.ConstructTreeFromArray(originalContent);
-
-                var extension = Path.GetExtension(FilePath);
-                encodedTree = HuffmanTree.EncodeTree(HuffmanTree.Root, "");
-                encodedFile = EncodeFile(originalContent);
-
-                WriteBinaryToFile(extension, encodedTree, encodedFile);
-                return true;
-            }
-
-            return false;
         }
 
         private void WriteBinaryToFile(string ext, string encodedTree, List<bool> compressedData)
         {
-            using var writer = new BitStreamWriter(RemoveFileExtension() + ".hf");
-
-            var extensionEncoded = Utilities.StrToBinStr(ext);
-
-            writer.WriteInt32(extensionEncoded.Length);
-            writer.WriteInt32(encodedTree.Length);
-            writer.WriteInt32(compressedData.Count);
-
-            foreach (var bit in extensionEncoded)
+            using (BitStreamWriter writer = new BitStreamWriter(RemoveFileExtension() + ".hf"))
             {
-                writer.WriteBit(bit == '1');
-            }
+                var extensionEncoded = Utilities.StrToBinStr(ext);
 
-            foreach (var bit in encodedTree)
-            {
-                writer.WriteBit(bit == '1');
-            }
+                writer.WriteInt32(extensionEncoded.Length);
+                writer.WriteInt32(encodedTree.Length);
+                writer.WriteInt32(compressedData.Count);
 
-            foreach (var boolean in compressedData)
-            {
-                writer.WriteBit(boolean);
+                foreach (var bit in extensionEncoded)
+                {
+                    writer.WriteBit(bit == '1');
+                }
+
+                foreach (var bit in encodedTree)
+                {
+                    writer.WriteBit(bit == '1');
+                }
+
+                foreach (var boolean in compressedData)
+                {
+                    writer.WriteBit(boolean);
+                }
             }
         }
 
         public List<bool> EncodeFile(byte[] content)
         {
-            List<bool> encodedBits = new();
+            List<bool> encodedBits = new List<bool>();
 
             foreach (var b in content)
             {
-                if (!HuffmanTree.CodesDictionary.TryGetValue(b, out var huffmanCode))
-                {
-                    continue;
-                }
+                string huffmanCode = HuffmanTree.CodesDictionary[b];
 
                 foreach (var bit in huffmanCode)
                 {
