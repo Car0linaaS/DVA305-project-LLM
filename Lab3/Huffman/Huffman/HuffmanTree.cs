@@ -41,17 +41,16 @@
 
             foreach (var data in occurances)
             {
-                priorityQueue.Enqueue(new HuffmanTree(data.Value, data.Key), data.Value);
+                priorityQueue.Enqueue(new HuffmanTree(data.Key, data.Value), data.Value);
             }
 
             while (priorityQueue.Count > 1)
             {
                 var left = priorityQueue.Dequeue();
                 var right = priorityQueue.Dequeue();
+                var combinedValue = left.Root.Occurence + right.Root.Occurence;
 
-                var value = left.Root.Occurence + right.Root.Occurence;
-
-                priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
+                priorityQueue.Enqueue(new HuffmanTree(left, right, combinedValue), combinedValue);
             }
 
             Root = priorityQueue.Dequeue().Root;
@@ -67,7 +66,7 @@
 
             if (root.Data != null)
             {
-                CodesDictionary.Add((byte)root.Data, binStr);
+                CodesDictionary[(byte)root.Data] = binStr;
             }
 
             CreateCharacterDictionary(root.Left, binStr + "0");
@@ -89,10 +88,7 @@
             }
             else
             {
-                if (root.Data != null)
-                {
-                    binStr += "1" + Utilities.ByteToBin((byte)root.Data);
-                }
+                binStr += "1" + Utilities.ByteToBin((byte)root.Data!);
             }
 
             return binStr;
