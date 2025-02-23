@@ -70,10 +70,14 @@
         public int ReadInt32()
         {
             byte[] bytes = new byte[4];
-            int read = stream.Read(bytes, 0, 4);
-            if (read != 4)
+            for (int i = 0; i < 4; i++)
             {
-                throw new EndOfStreamException("Not enough bytes to read Int32");
+                int byteRead = stream.ReadByte();
+                if (byteRead == -1)
+                {
+                    throw new EndOfStreamException();
+                }
+                bytes[i] = (byte)byteRead;
             }
 
             return BitConverter.ToInt32(bytes, 0);
