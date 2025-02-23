@@ -23,21 +23,21 @@
 
         public int ConstructTreeFromArray(byte[] treeArray)
         {
-            Dictionary<byte, int> occurances = new(); // Initialize the dictionary
+            Dictionary<byte, int> occurances = new Dictionary<byte, int>();
 
             foreach (var b in treeArray)
             {
                 if (occurances.ContainsKey(b))
                 {
-                    occurances[b]++; // Increment the value, not the dictionary
+                    occurances[b]++;
                 }
                 else
                 {
-                    occurances[b] = 1; // Add new key if not present
+                    occurances[b] = 1;
                 }
             }
 
-            PriorityQueue<HuffmanTree, int> priorityQueue = new(); // Corrected generic type name
+            PriorityQueue<HuffmanTree, int> priorityQueue = new PriorityQueue<HuffmanTree, int>();
 
             foreach (var data in occurances)
             {
@@ -50,21 +50,24 @@
                 var right = priorityQueue.Dequeue();
 
                 var value = left.Root.Occurence + right.Root.Occurence;
+
                 priorityQueue.Enqueue(new HuffmanTree(left, right, value), value);
             }
 
-            Root = priorityQueue.Dequeue(); // Use Dequeue to get the root node
-            CreateCharacterDictionary(Root, ""); // Corrected parameter order
-            return 0; // Added return statement as the method returns int
+            Root = priorityQueue.Peek().Root;
+            CreateCharacterDictionary(Root, "");
+            return 0;
         }
 
         private void CreateCharacterDictionary(TreeNode? root, string binStr)
         {
-            if (root == null) return;
-
+            if (root == null)
+            {
+                return;
+            }
             if (root.Data != null)
             {
-                CodesDictionary.Add((byte)root.Data, binStr); // Fixed method name casing
+                CodesDictionary.Add((byte)root.Data, binStr);
             }
 
             CreateCharacterDictionary(root.Left, binStr + "0");
@@ -80,16 +83,19 @@
 
             if (!root.IsLeaf)
             {
-                binStr += "0"; // Append "0" instead of replacing binStr
-                binStr = EncodeTree(root.Left, binStr); // Fixed parameter name from rootLeft to root.Left
+                binStr += "0";
+                binStr = EncodeTree(root.Left, binStr);
                 binStr = EncodeTree(root.Right, binStr);
             }
             else
             {
-                binStr += "1" + Utilities.ByteToBin((byte)root.Data); // Use "1" to indicate leaf
+                if (root.Data != null)
+                {
+                    binStr += "1" + Utilities.ByteToBin((byte)root.Data);
+                }
             }
 
-            return binStr; // Fixed incorrect return statement
+            return binStr;
         }
 
         // Decode string and construct the tree
