@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System;
-
-namespace Huffman
+﻿namespace Huffman
 {
     internal class BitStreamWriter : IDisposable
     {
@@ -57,62 +54,60 @@ namespace Huffman
         }
     }
 
-    class BitStreamReader, IDisposable
+    class BitStreamReader : IDisposable
     {
         private readonly FileStream stream;
-    private byte buffer;
-    private int bitsRemaining;
+        private byte buffer;
+        private int bitsRemaining;
 
-    public BitStreamReader(string filePath)
-    {
-        stream = new FileStream(filePath, FileMode.Open);
-        buffer = 0;
-        bitsRemaining = 0;
-    }
-
-    public int ReadInt32()
-    {
-        int[] num = new int[4];
-        for (int i = 0; i < 4; i++)
+        public BitStreamReader(string filePath)
         {
-            num[i] = stream.ReadByte();
-            if (num[i] == -1)
-            {
-                throw new EndOfStreamException();
-            }
+            stream = new FileStream(filePath, FileMode.Open);
+            buffer = 0;
+            bitsRemaining = 0;
         }
 
-        byte[] bytes = num.Select(i => (byte)i).ToArray();
-
-        int intValue = BitConverter.ToInt32(bytes, 0);
-
-        return intValue;
-    }
-
-    public bool ReadBit()
-    {
-        if (bitsRemaining == 0)
+        public int ReadInt32()
         {
-            int nextByte = stream.ReadByte();
-            if (nextByte == -1)
+            int[] num = new int[4];
+            for (int i = 0; i < 4; i++)
             {
-                throw new EndOfStreamException();
+                num[i] = stream.ReadByte();
             }
-            buffer = (byte)nextByte;
-            bitsRemaining = 8;
+
+            byte[] bytes = num.Select(i => (byte)i).ToArray();
+
+            int intValue = BitConverter.ToInt32(bytes, 0);
+
+            return intValue;
         }
 
-        bool bit = (buffer & 1) != 0;
+        public bool ReadBit()
+        {
+            if (bitsRemaining == 0)
+            {
+                int nextByte = stream.ReadByte();
+                if (nextByte == -1)
+                {
+                    throw new EndOfStreamException();
+                }
+                buffer = (byte)nextByte;
+                bitsRemaining = 8;
+            }
 
-        buffer >>= 1;
-        bitsRemaining--;
+            bool bit = (buffer & 0b10000000) != 0;
 
-        return bit;
+            buffer <<= 1;
+            bitsRemaining--;
+
+            return bit;
+        }
+
+        public void Dispose()
+        {
+            stream.Close();
+        }
     }
 
-    public void Dispose()
-    {
-        stream.Close();
-    }
-}
+
 }
