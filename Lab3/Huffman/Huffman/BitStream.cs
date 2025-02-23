@@ -13,20 +13,17 @@
             bitsWritten = 0;
         }
 
-        // Write int32 to stream
         public void WriteInt32(int num)
         {
             byte[] bytes = BitConverter.GetBytes(num);
             stream.Write(bytes);
         }
 
-        // Write byte to stream
         public void WriteByte(byte b)
         {
             stream.WriteByte(b);
         }
 
-        // Write one bit to buffer, output one byte to stream for each 8 bits
         public void WriteBit(bool bit)
         {
             buffer |= (byte)((bit ? 1 : 0) << (7 - bitsWritten));
@@ -40,7 +37,6 @@
             }
         }
 
-        // Flush any remaining bits to the stream
         public void Flush()
         {
             if (bitsWritten > 0)
@@ -51,7 +47,6 @@
             }
         }
 
-        // Flush and close the stream when disposing
         public void Dispose()
         {
             Flush();
@@ -59,33 +54,32 @@
         }
     }
 
-    class BitStreamReader : IDisposable
+    class BitStreamReader, IDisposable
     {
         private readonly FileStream stream;
         private byte buffer;
         private int bitsRemaining;
 
-        public BitStreamReader(string filePath)
+        BitStreamReader(filePath)
         {
-            stream = new FileStream(filePath, FileMode.Open);
-            buffer = 0;
-            bitsRemaining = 0;
+            stream = new FileStream(filePath, FileMode.Create);
+            buffer = 8;
+            bitsRemaining = 8;
         }
 
-        public int ReadInt32()
+        public void ReadInt32()
         {
-            byte[] bytes = new byte[4];
+            int[] num = new int[4];
             for (int i = 0; i < 4; i++)
             {
-                int nextByte = stream.ReadByte();
-                if (nextByte == -1)
-                {
-                    throw new EndOfStreamException();
-                }
-                bytes[i] = (byte)nextByte;
+                num[i] = stream.ReadByte();
             }
 
-            return BitConverter.ToInt32(bytes, 0);
+            byte[] bytes = num.Select(i => (byte)i).ToArray();
+
+            int intValue = BitConverter.ToInt32(bytes, 0);
+
+            return intValue;
         }
 
         public bool ReadBit()
@@ -95,15 +89,15 @@
                 int nextByte = stream.ReadByte();
                 if (nextByte == -1)
                 {
-                    throw new EndOfStreamException();
+                    throw EndOfStreamException();
                 }
                 buffer = (byte)nextByte;
                 bitsRemaining = 8;
             }
 
-            bool bit = (buffer & 0b10000000) != 0;
+            bool bit = (buffer & 0b00000001) != 0;
 
-            buffer <<= 1;
+            buffer >>= 1;
             bitsRemaining--;
 
             return bit;
@@ -114,4 +108,6 @@
             stream.Close();
         }
     }
+
+
 }
