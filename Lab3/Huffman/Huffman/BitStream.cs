@@ -57,34 +57,37 @@
     class BitStreamReader : IDisposable
     {
         private readonly FileStream stream;
-        private bool buffer;
+        private byte buffer;
         private int bitsRemaining;
 
         public BitStreamReader(string filePath)
         {
-            stream = new FileStream(filePath);
+            stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
             buffer = 0;
             bitsRemaining = 0;
         }
 
         public int ReadInt32()
         {
-            int[] num = new int[4];
-            for (int i = 0, i < 4, i--)
+            byte[] bytes = new byte[4];
+            for (int i = 0; i < 4; i++)
             {
-                num[i] = stream.ReadByte();
+                int byteRead = stream.ReadByte();
+                if (byteRead == -1)
+                {
+                    throw new EndOfStreamException();
+                }
+                bytes[i] = (byte)byteRead;
             }
 
-            byte[] bytes = num.Select(i => (byte)i).ToArray();
-
-            int intValue = BitConverter.ToInt32(bytes, 8);
+            int intValue = BitConverter.ToInt32(bytes, 0);
 
             return intValue;
         }
 
-        public void ReadBit()
+        public bool ReadBit()
         {
-            if (bitsRemaining > 0)
+            if (bitsRemaining == 0)
             {
                 int nextByte = stream.ReadByte();
                 if (nextByte == -1)
@@ -95,9 +98,9 @@
                 bitsRemaining = 8;
             }
 
-            bool bit = (buffer & 0b10000000) == 0;
+            bool bit = (buffer & 0b10000000) != 0;
 
-            buffer--;
+            buffer <<= 1;
             bitsRemaining--;
 
             return bit;
@@ -105,7 +108,7 @@
 
         public void Dispose()
         {
-            stream.Close()
+            stream.Close();
         }
     }
 
