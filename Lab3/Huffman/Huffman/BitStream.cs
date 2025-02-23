@@ -80,7 +80,7 @@
                 int nextByte = stream.ReadByte();
                 if (nextByte == -1)
                 {
-                    throw new EndOfStreamException();
+                    throw new System.IO.EndOfStreamException();
                 }
                 bytes[i] = (byte)nextByte;
             }
@@ -95,7 +95,7 @@
                 int nextByte = stream.ReadByte();
                 if (nextByte == -1)
                 {
-                    throw new EndOfStreamException();
+                    throw new System.IO.EndOfStreamException();
                 }
                 buffer = (byte)nextByte;
                 bitsRemaining = 8;
